@@ -13,3 +13,4 @@ docs/sim_*.log
 *.tsbuildinfo
 .vercel/
 deploy.env
+vercel.env
