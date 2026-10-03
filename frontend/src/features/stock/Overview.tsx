@@ -124,7 +124,7 @@ function SiteMap({ sites, risk, cells }: { sites: Site[]; risk: (id: string) => 
   const { t } = useTranslation()
   return (
     <MapContainer center={[23.77, 90.39]} zoom={11} scrollWheelZoom={false} className="h-full w-full" attributionControl>
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
+      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
       {sites.map((s) => {
         const r = risk(s.id)
         const total = cells.filter((c) => c.site_id === s.id).reduce((n, c) => n + c.band_0_2 + c.band_3_7 + c.band_8, 0)

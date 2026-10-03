@@ -70,7 +70,7 @@ export function Component() {
         <legend className="mb-2 text-sm font-medium text-zinc-800">{t('register.area')}</legend>
         <div className={cx('h-56 overflow-hidden rounded-xl ring-1', show('pin') ? 'ring-red-500' : 'ring-zinc-200')}>
           <MapContainer center={[23.78, 90.39]} zoom={11} className="h-full w-full" attributionControl>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
+            <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
             <PinPicker pin={pin} setPin={setPin} />
           </MapContainer>
         </div>
