@@ -12,3 +12,4 @@ docs/sim_*.log
 .manual-mock/
 *.tsbuildinfo
 .vercel/
+deploy.env
