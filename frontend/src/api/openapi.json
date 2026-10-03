@@ -1,0 +1,5824 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "LifeGrid API",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/api/v1/auth/login": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Login",
+    "operationId": "login_api_v1_auth_login_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LoginIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LoginOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/totp": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Totp",
+    "operationId": "totp_api_v1_auth_totp_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TotpIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TokenOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/otp/request": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Otp Request",
+    "operationId": "otp_request_api_v1_auth_otp_request_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OtpRequestIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/OtpSent"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/otp/verify": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Otp Verify",
+    "operationId": "otp_verify_api_v1_auth_otp_verify_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OtpVerifyIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TokenOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/refresh": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Refresh",
+    "operationId": "refresh_api_v1_auth_refresh_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TokenOut"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/auth/logout": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Logout",
+    "operationId": "logout_api_v1_auth_logout_post",
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     }
+    }
+   }
+  },
+  "/api/v1/me": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Get Me",
+    "operationId": "get_me_api_v1_me_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Me"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/sites": {
+   "get": {
+    "tags": [
+     "sites"
+    ],
+    "summary": "List Sites",
+    "operationId": "list_sites_api_v1_sites_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/SiteOut"
+         },
+         "type": "array",
+         "title": "Response List Sites Api V1 Sites Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "sites"
+    ],
+    "summary": "Create Site",
+    "operationId": "create_site_api_v1_sites_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SiteIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SiteOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/sites/{site_id}": {
+   "patch": {
+    "tags": [
+     "sites"
+    ],
+    "summary": "Update Site",
+    "operationId": "update_site_api_v1_sites__site_id__patch",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Site Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SitePatch"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SiteOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/users": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "List Users",
+    "operationId": "list_users_api_v1_admin_users_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/UserOut"
+         },
+         "type": "array",
+         "title": "Response List Users Api V1 Admin Users Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Create User",
+    "operationId": "create_user_api_v1_admin_users_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/UserIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/users/{user_id}": {
+   "patch": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Update User",
+    "operationId": "update_user_api_v1_admin_users__user_id__patch",
+    "parameters": [
+     {
+      "name": "user_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "User Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/UserPatch"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/users/{user_id}/totp": {
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Enrol Totp",
+    "description": "Issue a new authenticator secret. The URI is shown once; only the encrypted secret is stored.",
+    "operationId": "enrol_totp_api_v1_admin_users__user_id__totp_post",
+    "parameters": [
+     {
+      "name": "user_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "User Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TotpEnrolment"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/settings": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "List Settings",
+    "operationId": "list_settings_api_v1_admin_settings_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SettingsOut"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/settings/{key}": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Get Setting",
+    "operationId": "get_setting_api_v1_admin_settings__key__get",
+    "parameters": [
+     {
+      "name": "key",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Key"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SettingOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Put Setting",
+    "operationId": "put_setting_api_v1_admin_settings__key__put",
+    "parameters": [
+     {
+      "name": "key",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Key"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SettingIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SettingOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit": {
+   "get": {
+    "tags": [
+     "audit"
+    ],
+    "summary": "Search",
+    "operationId": "search_api_v1_audit_get",
+    "parameters": [
+     {
+      "name": "q",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "string",
+       "default": "",
+       "title": "Q"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 200,
+       "minimum": 1,
+       "default": 50,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "cursor",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Cursor"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AuditPage"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit/verify": {
+   "get": {
+    "tags": [
+     "audit"
+    ],
+    "summary": "Verify",
+    "operationId": "verify_api_v1_audit_verify_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ChainOut"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/stock/summary": {
+   "get": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Stock Summary",
+    "operationId": "stock_summary_api_v1_stock_summary_get",
+    "parameters": [
+     {
+      "name": "component",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/Component"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Component"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/StockCell"
+         },
+         "title": "Response Stock Summary Api V1 Stock Summary Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/units": {
+   "get": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "List Units",
+    "operationId": "list_units_api_v1_units_get",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Site Id"
+      }
+     },
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/UnitStatus"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     },
+     {
+      "name": "component",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/Component"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Component"
+      }
+     },
+     {
+      "name": "abo",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/Abo"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Abo"
+      }
+     },
+     {
+      "name": "rh",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/Rh"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Rh"
+      }
+     },
+     {
+      "name": "band",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "enum": [
+          "0_2",
+          "3_7",
+          "8"
+         ],
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Band"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 500,
+       "minimum": 1,
+       "default": 100,
+       "title": "Limit"
+      }
+     },
+     {
+      "name": "cursor",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Cursor"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UnitPage"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Receive Unit",
+    "operationId": "receive_unit_api_v1_units_post",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReceiveIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UnitOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/units/import": {
+   "post": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Import Units",
+    "operationId": "import_units_api_v1_units_import_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_import_units_api_v1_units_import_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ImportOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/units/{unit_id}": {
+   "get": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Get Unit",
+    "operationId": "get_unit_api_v1_units__unit_id__get",
+    "parameters": [
+     {
+      "name": "unit_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Unit Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UnitDetail"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/units/{unit_id}/transition": {
+   "post": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Transition One",
+    "operationId": "transition_one_api_v1_units__unit_id__transition_post",
+    "parameters": [
+     {
+      "name": "unit_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Unit Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TransitionIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TransitionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/units/transition": {
+   "post": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Transition Many",
+    "operationId": "transition_many_api_v1_units_transition_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BulkTransitionIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TransitionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/excursions": {
+   "post": {
+    "tags": [
+     "inventory"
+    ],
+    "summary": "Record Excursion",
+    "operationId": "record_excursion_api_v1_excursions_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ExcursionIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ExcursionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/compatibility": {
+   "get": {
+    "tags": [
+     "compatibility"
+    ],
+    "summary": "Compatible",
+    "operationId": "compatible_api_v1_compatibility_get",
+    "parameters": [
+     {
+      "name": "component",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Component"
+      }
+     },
+     {
+      "name": "abo",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Abo"
+      }
+     },
+     {
+      "name": "rh",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Rh"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/DonorGroup"
+         },
+         "title": "Response Compatible Api V1 Compatibility Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/admin/compat-rules": {
+   "get": {
+    "tags": [
+     "compatibility"
+    ],
+    "summary": "List Rules",
+    "operationId": "list_rules_api_v1_admin_compat_rules_get",
+    "parameters": [
+     {
+      "name": "component",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Component"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/RuleRow"
+         },
+         "title": "Response List Rules Api V1 Admin Compat Rules Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "compatibility"
+    ],
+    "summary": "Replace Rules",
+    "operationId": "replace_rules_api_v1_admin_compat_rules_put",
+    "parameters": [
+     {
+      "name": "component",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Component"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "array",
+        "items": {
+         "$ref": "#/components/schemas/RuleRow"
+        },
+        "title": "Rows"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/RuleRow"
+         },
+         "title": "Response Replace Rules Api V1 Admin Compat Rules Put"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/forecasts": {
+   "get": {
+    "tags": [
+     "forecasting"
+    ],
+    "summary": "Get Series",
+    "description": "28 days of actual usage plus the latest 7-day forecast for one series. Plasma is ABO-only (use rh=pos).",
+    "operationId": "get_series_api_v1_forecasts_get",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Site Id"
+      }
+     },
+     {
+      "name": "component",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Component"
+      }
+     },
+     {
+      "name": "abo",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/Abo"
+      }
+     },
+     {
+      "name": "rh",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "$ref": "#/components/schemas/Rh",
+       "default": "pos"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Series"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/forecasts/accuracy": {
+   "get": {
+    "tags": [
+     "forecasting"
+    ],
+    "summary": "Get Accuracy",
+    "operationId": "get_accuracy_api_v1_forecasts_accuracy_get",
+    "parameters": [
+     {
+      "name": "site_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "format": "uuid"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Site Id"
+      }
+     },
+     {
+      "name": "component",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "$ref": "#/components/schemas/Component"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Component"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Accuracy"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/plans": {
+   "get": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "List Plans",
+    "operationId": "list_plans_api_v1_plans_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/PlanSummary"
+         },
+         "type": "array",
+         "title": "Response List Plans Api V1 Plans Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Run Now",
+    "description": "Queue a plan run on the workers (202). With CELERY_ALWAYS_EAGER (dev, tests) it runs inline.",
+    "operationId": "run_now_api_v1_plans_post",
+    "responses": {
+     "202": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlanQueued"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/plans/{plan_id}": {
+   "get": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Get Plan",
+    "operationId": "get_plan_api_v1_plans__plan_id__get",
+    "parameters": [
+     {
+      "name": "plan_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Plan Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlanOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/recommendations/{rec_id}/decision": {
+   "post": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Decide",
+    "operationId": "decide_api_v1_recommendations__rec_id__decision_post",
+    "parameters": [
+     {
+      "name": "rec_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Rec Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DecisionIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecommendationOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/transfers": {
+   "get": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "List Transfers",
+    "operationId": "list_transfers_api_v1_transfers_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/TransferOut"
+         },
+         "type": "array",
+         "title": "Response List Transfers Api V1 Transfers Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/transfers/{transfer_id}/pick": {
+   "get": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Preview Pick",
+    "description": "The units dispatch would pick right now (FEFO, minimum remaining life).",
+    "operationId": "preview_pick_api_v1_transfers__transfer_id__pick_get",
+    "parameters": [
+     {
+      "name": "transfer_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Transfer Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/UnitOut"
+         },
+         "title": "Response Preview Pick Api V1 Transfers  Transfer Id  Pick Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/transfers/{transfer_id}/dispatch": {
+   "post": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Dispatch",
+    "operationId": "dispatch_api_v1_transfers__transfer_id__dispatch_post",
+    "parameters": [
+     {
+      "name": "transfer_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Transfer Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TransferOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/transfers/{transfer_id}/receive": {
+   "post": {
+    "tags": [
+     "redistribution"
+    ],
+    "summary": "Receive",
+    "operationId": "receive_api_v1_transfers__transfer_id__receive_post",
+    "parameters": [
+     {
+      "name": "transfer_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Transfer Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TransferOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests": {
+   "get": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "List Requests",
+    "operationId": "list_requests_api_v1_requests_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/RequestOut"
+         },
+         "type": "array",
+         "title": "Response List Requests Api V1 Requests Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Create",
+    "operationId": "create_api_v1_requests_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RequestIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests/{request_id}": {
+   "get": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Get",
+    "operationId": "get_api_v1_requests__request_id__get",
+    "parameters": [
+     {
+      "name": "request_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Request Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests/{request_id}/confirm": {
+   "post": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Confirm",
+    "operationId": "confirm_api_v1_requests__request_id__confirm_post",
+    "parameters": [
+     {
+      "name": "request_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Request Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests/{request_id}/cancel": {
+   "post": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Cancel",
+    "operationId": "cancel_api_v1_requests__request_id__cancel_post",
+    "parameters": [
+     {
+      "name": "request_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Request Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests/{request_id}/outcome": {
+   "post": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Outcome",
+    "operationId": "outcome_api_v1_requests__request_id__outcome_post",
+    "parameters": [
+     {
+      "name": "request_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Request Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/UnitsIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/requests/{request_id}/matches": {
+   "get": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Request Matches",
+    "operationId": "request_matches_api_v1_requests__request_id__matches_get",
+    "parameters": [
+     {
+      "name": "request_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Request Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/MatchOut"
+         },
+         "title": "Response Request Matches Api V1 Requests  Request Id  Matches Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/stock/low": {
+   "get": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Low Stock",
+    "operationId": "low_stock_api_v1_stock_low_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/LowStockOut"
+         },
+         "type": "array",
+         "title": "Response Low Stock Api V1 Stock Low Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/appeals": {
+   "post": {
+    "tags": [
+     "requests"
+    ],
+    "summary": "Create Appeal",
+    "operationId": "create_appeal_api_v1_appeals_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AppealIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RequestOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/donor/profile": {
+   "get": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Get Profile",
+    "operationId": "get_profile_api_v1_donor_profile_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DonorOut"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Put Profile",
+    "operationId": "put_profile_api_v1_donor_profile_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ProfileIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DonorOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Delete",
+    "operationId": "delete_api_v1_donor_profile_delete",
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     }
+    }
+   }
+  },
+  "/api/v1/donor/export": {
+   "get": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Export",
+    "operationId": "export_api_v1_donor_export_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Export Api V1 Donor Export Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/donors": {
+   "get": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Search",
+    "operationId": "search_api_v1_donors_get",
+    "parameters": [
+     {
+      "name": "group",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "pattern": "^(O|A|B|AB)(pos|neg)$"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Group"
+      }
+     },
+     {
+      "name": "eligible",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "pattern": "^(yes|no)$"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Eligible"
+      }
+     },
+     {
+      "name": "q",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string",
+         "maxLength": 40
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/CoordinatorDonorOut"
+         },
+         "title": "Response Search Api V1 Donors Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/donors/{donor_id}/deferrals": {
+   "post": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Defer",
+    "operationId": "defer_api_v1_donors__donor_id__deferrals_post",
+    "parameters": [
+     {
+      "name": "donor_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Donor Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DeferralIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/donors/{donor_id}/verify-group": {
+   "post": {
+    "tags": [
+     "donors"
+    ],
+    "summary": "Verify Group",
+    "operationId": "verify_group_api_v1_donors__donor_id__verify_group_post",
+    "parameters": [
+     {
+      "name": "donor_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Donor Id"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/donor/invitations": {
+   "get": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Invitations",
+    "operationId": "invitations_api_v1_donor_invitations_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/InvitationOut"
+         },
+         "type": "array",
+         "title": "Response Invitations Api V1 Donor Invitations Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/matches/{match_id}/respond": {
+   "post": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Respond",
+    "operationId": "respond_api_v1_matches__match_id__respond_post",
+    "parameters": [
+     {
+      "name": "match_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Match Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RespondIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/matches/{match_id}/outcome": {
+   "post": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Outcome",
+    "operationId": "outcome_api_v1_matches__match_id__outcome_post",
+    "parameters": [
+     {
+      "name": "match_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Match Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OutcomeIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/matches/{match_id}/messages": {
+   "get": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Messages",
+    "operationId": "messages_api_v1_matches__match_id__messages_get",
+    "parameters": [
+     {
+      "name": "match_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Match Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ThreadOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Post Message",
+    "operationId": "post_message_api_v1_matches__match_id__messages_post",
+    "parameters": [
+     {
+      "name": "match_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Match Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/MessageIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/matches/{match_id}/share-phone": {
+   "post": {
+    "tags": [
+     "matching"
+    ],
+    "summary": "Share Phone",
+    "operationId": "share_phone_api_v1_matches__match_id__share_phone_post",
+    "parameters": [
+     {
+      "name": "match_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "format": "uuid",
+       "title": "Match Id"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/healthz": {
+   "get": {
+    "tags": [
+     "ops"
+    ],
+    "summary": "Healthz",
+    "operationId": "healthz_api_v1_healthz_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": {
+          "type": "string"
+         },
+         "type": "object",
+         "title": "Response Healthz Api V1 Healthz Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/readyz": {
+   "get": {
+    "tags": [
+     "ops"
+    ],
+    "summary": "Readyz",
+    "operationId": "readyz_api_v1_readyz_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "Abo": {
+    "type": "string",
+    "enum": [
+     "O",
+     "A",
+     "B",
+     "AB"
+    ],
+    "title": "Abo"
+   },
+   "AcceptedMatch": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "status": {
+      "$ref": "#/components/schemas/MatchStatus"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "status"
+    ],
+    "title": "AcceptedMatch"
+   },
+   "Accuracy": {
+    "properties": {
+     "days": {
+      "type": "integer",
+      "title": "Days"
+     },
+     "scored": {
+      "type": "integer",
+      "title": "Scored"
+     },
+     "mae": {
+      "type": "number",
+      "title": "Mae"
+     },
+     "coverage": {
+      "type": "number",
+      "title": "Coverage"
+     }
+    },
+    "type": "object",
+    "required": [
+     "days",
+     "scored",
+     "mae",
+     "coverage"
+    ],
+    "title": "Accuracy"
+   },
+   "AppealIn": {
+    "properties": {
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "units": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 1.0,
+      "title": "Units"
+     },
+     "urgency": {
+      "$ref": "#/components/schemas/Urgency",
+      "default": "urgent"
+     },
+     "hours": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 336.0,
+        "minimum": 2.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hours"
+     }
+    },
+    "type": "object",
+    "required": [
+     "site_id",
+     "abo",
+     "rh",
+     "units"
+    ],
+    "title": "AppealIn"
+   },
+   "AuditOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "actor_user_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Actor User Id"
+     },
+     "actor": {
+      "type": "string",
+      "title": "Actor"
+     },
+     "action": {
+      "type": "string",
+      "title": "Action"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "entity_id": {
+      "type": "string",
+      "title": "Entity Id"
+     },
+     "data": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Data"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "hash": {
+      "type": "string",
+      "title": "Hash"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "actor_user_id",
+     "actor",
+     "action",
+     "entity_type",
+     "entity_id",
+     "data",
+     "created_at",
+     "hash"
+    ],
+    "title": "AuditOut"
+   },
+   "AuditPage": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/AuditOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "next_cursor": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Next Cursor"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "next_cursor"
+    ],
+    "title": "AuditPage"
+   },
+   "Availability": {
+    "type": "string",
+    "enum": [
+     "available",
+     "unavailable",
+     "travelling"
+    ],
+    "title": "Availability"
+   },
+   "Body_import_units_api_v1_units_import_post": {
+    "properties": {
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "file": {
+      "type": "string",
+      "contentMediaType": "application/octet-stream",
+      "title": "File"
+     }
+    },
+    "type": "object",
+    "required": [
+     "site_id",
+     "file"
+    ],
+    "title": "Body_import_units_api_v1_units_import_post"
+   },
+   "BulkTransitionIn": {
+    "properties": {
+     "action": {
+      "type": "string",
+      "pattern": "^(issue|quarantine|clear|discard)$",
+      "title": "Action"
+     },
+     "reason": {
+      "type": "string",
+      "maxLength": 500,
+      "title": "Reason",
+      "default": ""
+     },
+     "unit_ids": {
+      "items": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": "array",
+      "maxItems": 500,
+      "minItems": 1,
+      "title": "Unit Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "action",
+     "unit_ids"
+    ],
+    "title": "BulkTransitionIn"
+   },
+   "ChainOut": {
+    "properties": {
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "checked": {
+      "type": "integer",
+      "title": "Checked"
+     },
+     "broken_at": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Broken At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "ok",
+     "checked",
+     "broken_at"
+    ],
+    "title": "ChainOut"
+   },
+   "Component": {
+    "type": "string",
+    "enum": [
+     "red_cells",
+     "platelets",
+     "plasma"
+    ],
+    "title": "Component"
+   },
+   "CoordinatorDonorOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "abo": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Abo"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "rh": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rh"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "group_verified": {
+      "type": "boolean",
+      "title": "Group Verified"
+     },
+     "area_label": {
+      "type": "string",
+      "title": "Area Label"
+     },
+     "last_donation_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Last Donation On"
+     },
+     "availability": {
+      "$ref": "#/components/schemas/Availability"
+     },
+     "reliability": {
+      "type": "number",
+      "title": "Reliability"
+     },
+     "deferral": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Deferral"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "eligible_from": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Eligible From"
+     },
+     "weight_ok": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Ok"
+     },
+     "quiet_start": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet Start"
+     },
+     "quiet_end": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet End"
+     },
+     "emergency_override": {
+      "type": "boolean",
+      "title": "Emergency Override"
+     },
+     "max_invites_30d": {
+      "type": "integer",
+      "title": "Max Invites 30D"
+     },
+     "consent_version": {
+      "type": "string",
+      "title": "Consent Version"
+     },
+     "consent_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Consent At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "ref",
+     "abo",
+     "rh",
+     "group_verified",
+     "area_label",
+     "last_donation_on",
+     "availability",
+     "reliability",
+     "deferral",
+     "eligible_from",
+     "weight_ok",
+     "quiet_start",
+     "quiet_end",
+     "emergency_override",
+     "max_invites_30d",
+     "consent_version",
+     "consent_at"
+    ],
+    "title": "CoordinatorDonorOut",
+    "description": "No contact details, no exact location (SEC-08, SEC-09)."
+   },
+   "DecisionIn": {
+    "properties": {
+     "approve": {
+      "type": "boolean",
+      "title": "Approve"
+     },
+     "units": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Units"
+     }
+    },
+    "type": "object",
+    "required": [
+     "approve"
+    ],
+    "title": "DecisionIn"
+   },
+   "Deferral": {
+    "properties": {
+     "category": {
+      "type": "string",
+      "title": "Category"
+     },
+     "eligible_again_on": {
+      "type": "string",
+      "format": "date",
+      "title": "Eligible Again On"
+     }
+    },
+    "type": "object",
+    "required": [
+     "category",
+     "eligible_again_on"
+    ],
+    "title": "Deferral"
+   },
+   "DeferralIn": {
+    "properties": {
+     "category": {
+      "type": "string",
+      "pattern": "^[a-z_]{3,40}$",
+      "title": "Category"
+     },
+     "eligible_again_on": {
+      "type": "string",
+      "format": "date",
+      "title": "Eligible Again On"
+     }
+    },
+    "type": "object",
+    "required": [
+     "category",
+     "eligible_again_on"
+    ],
+    "title": "DeferralIn"
+   },
+   "DonorGroup": {
+    "properties": {
+     "donor_abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "donor_rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "rank": {
+      "type": "integer",
+      "title": "Rank"
+     }
+    },
+    "type": "object",
+    "required": [
+     "donor_abo",
+     "donor_rh",
+     "rank"
+    ],
+    "title": "DonorGroup"
+   },
+   "DonorOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "abo": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Abo"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "rh": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rh"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "group_verified": {
+      "type": "boolean",
+      "title": "Group Verified"
+     },
+     "area_label": {
+      "type": "string",
+      "title": "Area Label"
+     },
+     "area_lat": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Area Lat"
+     },
+     "area_lng": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Area Lng"
+     },
+     "birth_year": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Birth Year"
+     },
+     "weight_ok": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Ok"
+     },
+     "last_donation_on": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Last Donation On"
+     },
+     "availability": {
+      "$ref": "#/components/schemas/Availability"
+     },
+     "reliability": {
+      "type": "number",
+      "title": "Reliability"
+     },
+     "deferral": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Deferral"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "eligible_from": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Eligible From"
+     },
+     "quiet_start": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet Start"
+     },
+     "quiet_end": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet End"
+     },
+     "emergency_override": {
+      "type": "boolean",
+      "title": "Emergency Override"
+     },
+     "max_invites_30d": {
+      "type": "integer",
+      "title": "Max Invites 30D"
+     },
+     "consent_version": {
+      "type": "string",
+      "title": "Consent Version"
+     },
+     "consent_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Consent At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "ref",
+     "abo",
+     "rh",
+     "group_verified",
+     "area_label",
+     "area_lat",
+     "area_lng",
+     "birth_year",
+     "weight_ok",
+     "last_donation_on",
+     "availability",
+     "reliability",
+     "deferral",
+     "eligible_from",
+     "quiet_start",
+     "quiet_end",
+     "emergency_override",
+     "max_invites_30d",
+     "consent_version",
+     "consent_at"
+    ],
+    "title": "DonorOut"
+   },
+   "ExcursionIn": {
+    "properties": {
+     "site_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Site Id"
+     },
+     "transfer_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Transfer Id"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Started At"
+     },
+     "ended_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ended At"
+     },
+     "min_c": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 80.0,
+        "minimum": -80.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Min C"
+     },
+     "max_c": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 80.0,
+        "minimum": -80.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Max C"
+     }
+    },
+    "type": "object",
+    "required": [
+     "component",
+     "started_at"
+    ],
+    "title": "ExcursionIn"
+   },
+   "ExcursionOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "quarantined": {
+      "type": "integer",
+      "title": "Quarantined"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "quarantined"
+    ],
+    "title": "ExcursionOut"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "ImportOut": {
+    "properties": {
+     "imported": {
+      "type": "integer",
+      "title": "Imported"
+     },
+     "errors": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Errors"
+     }
+    },
+    "type": "object",
+    "required": [
+     "imported",
+     "errors"
+    ],
+    "title": "ImportOut"
+   },
+   "InvitationOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "request_ref": {
+      "type": "string",
+      "title": "Request Ref"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "hospital_area": {
+      "type": "string",
+      "title": "Hospital Area"
+     },
+     "urgency": {
+      "$ref": "#/components/schemas/Urgency"
+     },
+     "needed_by": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Needed By"
+     },
+     "status": {
+      "$ref": "#/components/schemas/MatchStatus"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "request_ref",
+     "abo",
+     "rh",
+     "hospital_area",
+     "urgency",
+     "needed_by",
+     "status",
+     "kind"
+    ],
+    "title": "InvitationOut"
+   },
+   "LoginIn": {
+    "properties": {
+     "email": {
+      "type": "string",
+      "maxLength": 254,
+      "title": "Email"
+     },
+     "password": {
+      "type": "string",
+      "maxLength": 512,
+      "title": "Password"
+     }
+    },
+    "type": "object",
+    "required": [
+     "email",
+     "password"
+    ],
+    "title": "LoginIn"
+   },
+   "LoginOut": {
+    "properties": {
+     "totp_required": {
+      "type": "boolean",
+      "title": "Totp Required"
+     },
+     "challenge": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Challenge"
+     },
+     "session": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/TokenOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "totp_required"
+    ],
+    "title": "LoginOut"
+   },
+   "LowStockOut": {
+    "properties": {
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "available": {
+      "type": "integer",
+      "title": "Available"
+     },
+     "demand": {
+      "type": "number",
+      "title": "Demand"
+     },
+     "shortfall": {
+      "type": "integer",
+      "title": "Shortfall"
+     },
+     "days": {
+      "type": "integer",
+      "title": "Days"
+     },
+     "open_appeal_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Open Appeal Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "site_id",
+     "abo",
+     "rh",
+     "available",
+     "demand",
+     "shortfall",
+     "days",
+     "open_appeal_id"
+    ],
+    "title": "LowStockOut"
+   },
+   "MatchOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "donor_ref": {
+      "type": "string",
+      "title": "Donor Ref"
+     },
+     "abo": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Abo"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "rh": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rh"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "group_verified": {
+      "type": "boolean",
+      "title": "Group Verified"
+     },
+     "wave": {
+      "type": "integer",
+      "title": "Wave"
+     },
+     "score": {
+      "type": "number",
+      "title": "Score"
+     },
+     "status": {
+      "$ref": "#/components/schemas/MatchStatus"
+     },
+     "invited_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Invited At"
+     },
+     "responded_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Responded At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "donor_ref",
+     "abo",
+     "rh",
+     "group_verified",
+     "wave",
+     "score",
+     "status",
+     "invited_at",
+     "responded_at"
+    ],
+    "title": "MatchOut"
+   },
+   "MatchStatus": {
+    "type": "string",
+    "enum": [
+     "invited",
+     "accepted",
+     "declined",
+     "expired",
+     "donated",
+     "no_show",
+     "deferred_on_site",
+     "withdrawn"
+    ],
+    "title": "MatchStatus"
+   },
+   "Me": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "role": {
+      "$ref": "#/components/schemas/Role"
+     },
+     "email": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Email"
+     },
+     "site_ids": {
+      "items": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": "array",
+      "title": "Site Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "role",
+     "email",
+     "site_ids"
+    ],
+    "title": "Me"
+   },
+   "MessageIn": {
+    "properties": {
+     "body": {
+      "type": "string",
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Body"
+     }
+    },
+    "type": "object",
+    "required": [
+     "body"
+    ],
+    "title": "MessageIn"
+   },
+   "MessageOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "mine": {
+      "type": "boolean",
+      "title": "Mine"
+     },
+     "body": {
+      "type": "string",
+      "title": "Body"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "mine",
+     "body",
+     "created_at"
+    ],
+    "title": "MessageOut"
+   },
+   "MovementOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "from_status": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/UnitStatus"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "to_status": {
+      "$ref": "#/components/schemas/UnitStatus"
+     },
+     "from_site_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "From Site Id"
+     },
+     "to_site_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "To Site Id"
+     },
+     "transfer_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Transfer Id"
+     },
+     "actor_user_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Actor User Id"
+     },
+     "actor": {
+      "type": "string",
+      "title": "Actor",
+      "default": "system"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "from_status",
+     "to_status",
+     "from_site_id",
+     "to_site_id",
+     "transfer_id",
+     "actor_user_id",
+     "reason",
+     "created_at"
+    ],
+    "title": "MovementOut"
+   },
+   "OtpRequestIn": {
+    "properties": {
+     "phone": {
+      "type": "string",
+      "maxLength": 32,
+      "title": "Phone"
+     }
+    },
+    "type": "object",
+    "required": [
+     "phone"
+    ],
+    "title": "OtpRequestIn"
+   },
+   "OtpSent": {
+    "properties": {
+     "sent": {
+      "type": "boolean",
+      "title": "Sent"
+     },
+     "dev_code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Dev Code"
+     }
+    },
+    "type": "object",
+    "required": [
+     "sent"
+    ],
+    "title": "OtpSent"
+   },
+   "OtpVerifyIn": {
+    "properties": {
+     "phone": {
+      "type": "string",
+      "maxLength": 32,
+      "title": "Phone"
+     },
+     "code": {
+      "type": "string",
+      "pattern": "^\\d{6}$",
+      "title": "Code"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "donor",
+       "requester"
+      ],
+      "title": "Role",
+      "default": "donor"
+     }
+    },
+    "type": "object",
+    "required": [
+     "phone",
+     "code"
+    ],
+    "title": "OtpVerifyIn"
+   },
+   "OutcomeIn": {
+    "properties": {
+     "outcome": {
+      "$ref": "#/components/schemas/MatchStatus"
+     }
+    },
+    "type": "object",
+    "required": [
+     "outcome"
+    ],
+    "title": "OutcomeIn"
+   },
+   "PlanOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "horizon_days": {
+      "type": "integer",
+      "title": "Horizon Days"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "solver_status": {
+      "type": "string",
+      "title": "Solver Status"
+     },
+     "solver_seconds": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Seconds"
+     },
+     "is_fallback": {
+      "type": "boolean",
+      "title": "Is Fallback"
+     },
+     "projected": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Projected"
+     },
+     "recommendations": {
+      "items": {
+       "$ref": "#/components/schemas/RecommendationOut"
+      },
+      "type": "array",
+      "title": "Recommendations"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "created_at",
+     "horizon_days",
+     "status",
+     "solver_status",
+     "solver_seconds",
+     "is_fallback",
+     "projected",
+     "recommendations"
+    ],
+    "title": "PlanOut"
+   },
+   "PlanQueued": {
+    "properties": {
+     "queued": {
+      "type": "boolean",
+      "title": "Queued"
+     },
+     "plan_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Plan Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "queued",
+     "plan_id"
+    ],
+    "title": "PlanQueued"
+   },
+   "PlanSummary": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "horizon_days": {
+      "type": "integer",
+      "title": "Horizon Days"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "solver_status": {
+      "type": "string",
+      "title": "Solver Status"
+     },
+     "solver_seconds": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Solver Seconds"
+     },
+     "is_fallback": {
+      "type": "boolean",
+      "title": "Is Fallback"
+     },
+     "projected": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Projected"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "created_at",
+     "horizon_days",
+     "status",
+     "solver_status",
+     "solver_seconds",
+     "is_fallback",
+     "projected"
+    ],
+    "title": "PlanSummary"
+   },
+   "Point": {
+    "properties": {
+     "day": {
+      "type": "string",
+      "format": "date",
+      "title": "Day"
+     },
+     "actual": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Actual"
+     },
+     "point": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Point"
+     },
+     "low": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Low"
+     },
+     "high": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "High"
+     }
+    },
+    "type": "object",
+    "required": [
+     "day"
+    ],
+    "title": "Point"
+   },
+   "ProfileIn": {
+    "properties": {
+     "abo": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Abo"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "rh": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rh"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "area_lat": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 90.0,
+        "minimum": -90.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Area Lat"
+     },
+     "area_lng": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 180.0,
+        "minimum": -180.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Area Lng"
+     },
+     "birth_year": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 2100.0,
+        "minimum": 1900.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Birth Year"
+     },
+     "weight_ok": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Ok"
+     },
+     "availability": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Availability"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "quiet_start": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet Start"
+     },
+     "quiet_end": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quiet End"
+     },
+     "emergency_override": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Emergency Override"
+     },
+     "max_invites_30d": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 10.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Max Invites 30D"
+     },
+     "consent": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Consent"
+     },
+     "consent_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Consent Version"
+     }
+    },
+    "type": "object",
+    "title": "ProfileIn"
+   },
+   "Progress": {
+    "properties": {
+     "stock_units": {
+      "type": "integer",
+      "title": "Stock Units"
+     },
+     "donors_notified": {
+      "type": "integer",
+      "title": "Donors Notified"
+     },
+     "donors_accepted": {
+      "type": "integer",
+      "title": "Donors Accepted"
+     }
+    },
+    "type": "object",
+    "required": [
+     "stock_units",
+     "donors_notified",
+     "donors_accepted"
+    ],
+    "title": "Progress"
+   },
+   "ReceiveIn": {
+    "properties": {
+     "unit_code": {
+      "type": "string",
+      "pattern": "^[A-Z0-9-]{6,24}$",
+      "title": "Unit Code"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "collected_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Collected At"
+     },
+     "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Expires At"
+     },
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "unit_code",
+     "abo",
+     "rh",
+     "component",
+     "collected_at",
+     "expires_at",
+     "site_id"
+    ],
+    "title": "ReceiveIn"
+   },
+   "RecommendationOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "plan_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Plan Id"
+     },
+     "from_site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "From Site Id"
+     },
+     "to_site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "To Site Id"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "units": {
+      "type": "integer",
+      "title": "Units"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "expected_benefit": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Expected Benefit"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "decided_by": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Decided By"
+     },
+     "decided_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Decided At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "plan_id",
+     "from_site_id",
+     "to_site_id",
+     "component",
+     "abo",
+     "rh",
+     "units",
+     "reason",
+     "expected_benefit",
+     "status",
+     "decided_by",
+     "decided_at"
+    ],
+    "title": "RecommendationOut"
+   },
+   "RequestIn": {
+    "properties": {
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "units_needed": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 1.0,
+      "title": "Units Needed"
+     },
+     "urgency": {
+      "$ref": "#/components/schemas/Urgency"
+     },
+     "needed_by": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Needed By"
+     }
+    },
+    "type": "object",
+    "required": [
+     "site_id",
+     "abo",
+     "rh",
+     "component",
+     "units_needed",
+     "urgency",
+     "needed_by"
+    ],
+    "title": "RequestIn",
+    "description": "FR-REQ-01: hospital and needed-by are required (422 without them)."
+   },
+   "RequestOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "requester_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Requester Id"
+     },
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "units_needed": {
+      "type": "integer",
+      "title": "Units Needed"
+     },
+     "units_secured": {
+      "type": "integer",
+      "title": "Units Secured"
+     },
+     "urgency": {
+      "$ref": "#/components/schemas/Urgency"
+     },
+     "needed_by": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Needed By"
+     },
+     "status": {
+      "$ref": "#/components/schemas/RequestStatus"
+     },
+     "confirmed_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Confirmed At"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "shortfall": {
+      "type": "integer",
+      "title": "Shortfall"
+     },
+     "wave": {
+      "type": "integer",
+      "title": "Wave"
+     },
+     "escalated_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Escalated At"
+     },
+     "transfer_plan_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Transfer Plan Id"
+     },
+     "progress": {
+      "$ref": "#/components/schemas/Progress"
+     },
+     "accepted_matches": {
+      "items": {
+       "$ref": "#/components/schemas/AcceptedMatch"
+      },
+      "type": "array",
+      "title": "Accepted Matches"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "ref",
+     "kind",
+     "requester_id",
+     "site_id",
+     "abo",
+     "rh",
+     "component",
+     "units_needed",
+     "units_secured",
+     "urgency",
+     "needed_by",
+     "status",
+     "confirmed_at",
+     "created_at",
+     "shortfall",
+     "wave",
+     "escalated_at",
+     "transfer_plan_id",
+     "progress",
+     "accepted_matches"
+    ],
+    "title": "RequestOut"
+   },
+   "RequestStatus": {
+    "type": "string",
+    "enum": [
+     "submitted",
+     "confirmed",
+     "covered_by_stock",
+     "matching",
+     "fulfilled",
+     "partially_fulfilled",
+     "unfilled",
+     "cancelled"
+    ],
+    "title": "RequestStatus"
+   },
+   "RespondIn": {
+    "properties": {
+     "accept": {
+      "type": "boolean",
+      "title": "Accept"
+     }
+    },
+    "type": "object",
+    "required": [
+     "accept"
+    ],
+    "title": "RespondIn"
+   },
+   "Rh": {
+    "type": "string",
+    "enum": [
+     "pos",
+     "neg"
+    ],
+    "title": "Rh"
+   },
+   "Role": {
+    "type": "string",
+    "enum": [
+     "bank_manager",
+     "hospital_lead",
+     "donor_coordinator",
+     "donor",
+     "requester",
+     "admin",
+     "auditor"
+    ],
+    "title": "Role"
+   },
+   "RuleRow": {
+    "properties": {
+     "recipient_abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "recipient_rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "donor_abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "donor_rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "rank": {
+      "type": "integer",
+      "maximum": 16.0,
+      "minimum": 1.0,
+      "title": "Rank"
+     }
+    },
+    "type": "object",
+    "required": [
+     "recipient_abo",
+     "recipient_rh",
+     "donor_abo",
+     "donor_rh",
+     "rank"
+    ],
+    "title": "RuleRow"
+   },
+   "Series": {
+    "properties": {
+     "model": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model"
+     },
+     "model_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Model Version"
+     },
+     "mae": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mae"
+     },
+     "baseline_mae": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Baseline Mae"
+     },
+     "coverage": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Coverage"
+     },
+     "points": {
+      "items": {
+       "$ref": "#/components/schemas/Point"
+      },
+      "type": "array",
+      "title": "Points"
+     }
+    },
+    "type": "object",
+    "required": [
+     "model",
+     "model_version",
+     "mae",
+     "baseline_mae",
+     "coverage",
+     "points"
+    ],
+    "title": "Series"
+   },
+   "SettingChangeOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "old_value": {
+      "title": "Old Value"
+     },
+     "new_value": {
+      "title": "New Value"
+     },
+     "version": {
+      "type": "integer",
+      "title": "Version"
+     },
+     "changed_by": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Changed By"
+     },
+     "changed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Changed At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "old_value",
+     "new_value",
+     "version",
+     "changed_by",
+     "changed_at"
+    ],
+    "title": "SettingChangeOut"
+   },
+   "SettingIn": {
+    "properties": {
+     "value": {
+      "title": "Value"
+     }
+    },
+    "type": "object",
+    "required": [
+     "value"
+    ],
+    "title": "SettingIn"
+   },
+   "SettingOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "value": {
+      "title": "Value"
+     },
+     "version": {
+      "type": "integer",
+      "title": "Version"
+     },
+     "updated_by": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Updated By"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "value",
+     "version",
+     "updated_by",
+     "updated_at"
+    ],
+    "title": "SettingOut"
+   },
+   "SettingsOut": {
+    "properties": {
+     "settings": {
+      "items": {
+       "$ref": "#/components/schemas/SettingOut"
+      },
+      "type": "array",
+      "title": "Settings"
+     },
+     "history": {
+      "items": {
+       "$ref": "#/components/schemas/SettingChangeOut"
+      },
+      "type": "array",
+      "title": "History"
+     }
+    },
+    "type": "object",
+    "required": [
+     "settings",
+     "history"
+    ],
+    "title": "SettingsOut"
+   },
+   "SiteIn": {
+    "properties": {
+     "code": {
+      "type": "string",
+      "pattern": "^[A-Z0-9-]{2,16}$",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 2,
+      "title": "Name"
+     },
+     "type": {
+      "$ref": "#/components/schemas/SiteType"
+     },
+     "lat": {
+      "type": "number",
+      "maximum": 90.0,
+      "minimum": -90.0,
+      "title": "Lat"
+     },
+     "lng": {
+      "type": "number",
+      "maximum": 180.0,
+      "minimum": -180.0,
+      "title": "Lng"
+     },
+     "timezone": {
+      "type": "string",
+      "title": "Timezone",
+      "default": "Asia/Dhaka"
+     }
+    },
+    "type": "object",
+    "required": [
+     "code",
+     "name",
+     "type",
+     "lat",
+     "lng"
+    ],
+    "title": "SiteIn"
+   },
+   "SiteOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "type": {
+      "$ref": "#/components/schemas/SiteType"
+     },
+     "lat": {
+      "type": "number",
+      "title": "Lat"
+     },
+     "lng": {
+      "type": "number",
+      "title": "Lng"
+     },
+     "timezone": {
+      "type": "string",
+      "title": "Timezone"
+     },
+     "active": {
+      "type": "boolean",
+      "title": "Active"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "code",
+     "name",
+     "type",
+     "lat",
+     "lng",
+     "timezone",
+     "active"
+    ],
+    "title": "SiteOut"
+   },
+   "SitePatch": {
+    "properties": {
+     "name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 120,
+        "minLength": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 90.0,
+        "minimum": -90.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lng": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 180.0,
+        "minimum": -180.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lng"
+     },
+     "timezone": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Timezone"
+     },
+     "active": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Active"
+     }
+    },
+    "type": "object",
+    "title": "SitePatch"
+   },
+   "SiteType": {
+    "type": "string",
+    "enum": [
+     "hospital",
+     "blood_bank"
+    ],
+    "title": "SiteType"
+   },
+   "StockCell": {
+    "properties": {
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "band_0_2": {
+      "type": "integer",
+      "title": "Band 0 2"
+     },
+     "band_3_7": {
+      "type": "integer",
+      "title": "Band 3 7"
+     },
+     "band_8": {
+      "type": "integer",
+      "title": "Band 8"
+     }
+    },
+    "type": "object",
+    "required": [
+     "site_id",
+     "component",
+     "abo",
+     "rh",
+     "band_0_2",
+     "band_3_7",
+     "band_8"
+    ],
+    "title": "StockCell"
+   },
+   "ThreadOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "request_ref": {
+      "type": "string",
+      "title": "Request Ref"
+     },
+     "hospital_area": {
+      "type": "string",
+      "title": "Hospital Area"
+     },
+     "role": {
+      "type": "string",
+      "title": "Role"
+     },
+     "donor_shares_phone": {
+      "type": "boolean",
+      "title": "Donor Shares Phone"
+     },
+     "requester_shares_phone": {
+      "type": "boolean",
+      "title": "Requester Shares Phone"
+     },
+     "counterpart_phone": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Counterpart Phone"
+     },
+     "messages": {
+      "items": {
+       "$ref": "#/components/schemas/MessageOut"
+      },
+      "type": "array",
+      "title": "Messages"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "request_ref",
+     "hospital_area",
+     "role",
+     "donor_shares_phone",
+     "requester_shares_phone",
+     "counterpart_phone",
+     "messages"
+    ],
+    "title": "ThreadOut"
+   },
+   "TokenOut": {
+    "properties": {
+     "access_token": {
+      "type": "string",
+      "title": "Access Token"
+     },
+     "token_type": {
+      "type": "string",
+      "const": "bearer",
+      "title": "Token Type",
+      "default": "bearer"
+     },
+     "expires_in": {
+      "type": "integer",
+      "title": "Expires In"
+     },
+     "user": {
+      "$ref": "#/components/schemas/Me"
+     }
+    },
+    "type": "object",
+    "required": [
+     "access_token",
+     "expires_in",
+     "user"
+    ],
+    "title": "TokenOut"
+   },
+   "TotpEnrolment": {
+    "properties": {
+     "otpauth_uri": {
+      "type": "string",
+      "title": "Otpauth Uri"
+     }
+    },
+    "type": "object",
+    "required": [
+     "otpauth_uri"
+    ],
+    "title": "TotpEnrolment"
+   },
+   "TotpIn": {
+    "properties": {
+     "challenge": {
+      "type": "string",
+      "title": "Challenge"
+     },
+     "code": {
+      "type": "string",
+      "pattern": "^\\d{6}$",
+      "title": "Code"
+     }
+    },
+    "type": "object",
+    "required": [
+     "challenge",
+     "code"
+    ],
+    "title": "TotpIn"
+   },
+   "TransferOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "recommendation_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Recommendation Id"
+     },
+     "from_site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "From Site Id"
+     },
+     "to_site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "To Site Id"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "units": {
+      "type": "integer",
+      "title": "Units"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "dispatched_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Dispatched At"
+     },
+     "received_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Received At"
+     },
+     "unit_codes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Unit Codes",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "recommendation_id",
+     "from_site_id",
+     "to_site_id",
+     "component",
+     "abo",
+     "rh",
+     "units",
+     "status",
+     "created_at",
+     "dispatched_at",
+     "received_at"
+    ],
+    "title": "TransferOut"
+   },
+   "TransitionIn": {
+    "properties": {
+     "action": {
+      "type": "string",
+      "pattern": "^(issue|quarantine|clear|discard)$",
+      "title": "Action"
+     },
+     "reason": {
+      "type": "string",
+      "maxLength": 500,
+      "title": "Reason",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "action"
+    ],
+    "title": "TransitionIn"
+   },
+   "TransitionOut": {
+    "properties": {
+     "changed": {
+      "type": "integer",
+      "title": "Changed"
+     }
+    },
+    "type": "object",
+    "required": [
+     "changed"
+    ],
+    "title": "TransitionOut"
+   },
+   "UnitDetail": {
+    "properties": {
+     "unit": {
+      "$ref": "#/components/schemas/UnitOut"
+     },
+     "movements": {
+      "items": {
+       "$ref": "#/components/schemas/MovementOut"
+      },
+      "type": "array",
+      "title": "Movements"
+     }
+    },
+    "type": "object",
+    "required": [
+     "unit",
+     "movements"
+    ],
+    "title": "UnitDetail"
+   },
+   "UnitOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "unit_code": {
+      "type": "string",
+      "title": "Unit Code"
+     },
+     "abo": {
+      "$ref": "#/components/schemas/Abo"
+     },
+     "rh": {
+      "$ref": "#/components/schemas/Rh"
+     },
+     "component": {
+      "$ref": "#/components/schemas/Component"
+     },
+     "collected_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Collected At"
+     },
+     "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Expires At"
+     },
+     "site_id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Site Id"
+     },
+     "status": {
+      "$ref": "#/components/schemas/UnitStatus"
+     },
+     "reserved_for": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "uuid"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reserved For"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "unit_code",
+     "abo",
+     "rh",
+     "component",
+     "collected_at",
+     "expires_at",
+     "site_id",
+     "status",
+     "reserved_for"
+    ],
+    "title": "UnitOut"
+   },
+   "UnitPage": {
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/UnitOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "next_cursor": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Next Cursor"
+     },
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "next_cursor",
+     "total"
+    ],
+    "title": "UnitPage"
+   },
+   "UnitStatus": {
+    "type": "string",
+    "enum": [
+     "available",
+     "reserved",
+     "in_transit",
+     "quarantined",
+     "issued",
+     "expired",
+     "discarded"
+    ],
+    "title": "UnitStatus"
+   },
+   "UnitsIn": {
+    "properties": {
+     "units": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 1.0,
+      "title": "Units"
+     }
+    },
+    "type": "object",
+    "required": [
+     "units"
+    ],
+    "title": "UnitsIn"
+   },
+   "Urgency": {
+    "type": "string",
+    "enum": [
+     "emergency",
+     "urgent",
+     "routine"
+    ],
+    "title": "Urgency"
+   },
+   "UserIn": {
+    "properties": {
+     "email": {
+      "type": "string",
+      "maxLength": 254,
+      "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "title": "Email"
+     },
+     "role": {
+      "$ref": "#/components/schemas/Role"
+     },
+     "site_ids": {
+      "items": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": "array",
+      "title": "Site Ids",
+      "default": []
+     },
+     "password": {
+      "type": "string",
+      "maxLength": 512,
+      "title": "Password"
+     }
+    },
+    "type": "object",
+    "required": [
+     "email",
+     "role",
+     "password"
+    ],
+    "title": "UserIn"
+   },
+   "UserOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "format": "uuid",
+      "title": "Id"
+     },
+     "email": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Email"
+     },
+     "role": {
+      "$ref": "#/components/schemas/Role"
+     },
+     "site_ids": {
+      "items": {
+       "type": "string",
+       "format": "uuid"
+      },
+      "type": "array",
+      "title": "Site Ids"
+     },
+     "active": {
+      "type": "boolean",
+      "title": "Active"
+     },
+     "totp": {
+      "type": "boolean",
+      "title": "Totp"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "email",
+     "role",
+     "site_ids",
+     "active",
+     "totp"
+    ],
+    "title": "UserOut"
+   },
+   "UserPatch": {
+    "properties": {
+     "role": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Role"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "site_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string",
+         "format": "uuid"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Site Ids"
+     },
+     "active": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Active"
+     }
+    },
+    "type": "object",
+    "title": "UserPatch"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

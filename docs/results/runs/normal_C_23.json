@@ -1,0 +1,89 @@
+{
+ "config": {
+  "days": 180,
+  "demand": {
+   "group_mix": {
+    "A+": 0.28,
+    "A-": 0.03,
+    "AB+": 0.07,
+    "AB-": 0.01,
+    "B+": 0.2,
+    "B-": 0.02,
+    "O+": 0.35,
+    "O-": 0.04
+   },
+   "model": "poisson",
+   "spikes": {
+    "duration_days": 2,
+    "multiplier": 3.0,
+    "probability_per_day": 0.02
+   },
+   "weekly_pattern": [
+    1.1,
+    1.1,
+    1.0,
+    1.0,
+    1.0,
+    0.7,
+    0.6
+   ]
+  },
+  "disruptions": [],
+  "donors": {
+   "base_accept_rate": 0.3,
+   "count": 3000,
+   "no_show_rate": 0.15
+  },
+  "forecast_noise": 0.0,
+  "name": "normal",
+  "region": {
+   "blood_banks": 2,
+   "radius_km": 40.0,
+   "sites": 12
+  },
+  "requests": {
+   "per_week": 6.0,
+   "urgency_mix": {
+    "emergency": 0.2,
+    "routine": 0.3,
+    "urgent": 0.5
+   }
+  },
+  "site_size": {
+   "large": 0.15,
+   "medium": 0.35,
+   "small": 0.5
+  },
+  "supply": {
+   "deliveries_per_week": 3,
+   "fill_rate": 0.95
+  },
+  "warmup_days": 56
+ },
+ "metrics": {
+  "avg_age_at_issue_days": 19.991,
+  "expired_platelets": 418,
+  "expired_red_cells": 72,
+  "expired_share": 0.03083,
+  "expired_units": 490,
+  "fallback_count": 0,
+  "issued_units": 15404,
+  "lanes_used": 1092,
+  "shortage_events": 479,
+  "shortage_events_rh_neg": 110,
+  "transfer_units": 3911,
+  "transfers": 2252,
+  "unit_km": 70342.2,
+  "unmet_plasma": 1,
+  "unmet_platelets": 543,
+  "unmet_red_cells": 73,
+  "unmet_units": 617,
+  "unmet_units_rh_neg": 116
+ },
+ "policy": "C",
+ "scenario": "normal",
+ "seed": 23,
+ "timing": {
+  "solver_seconds": 397.54
+ }
+}

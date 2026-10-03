@@ -1,0 +1,16 @@
+name: large_region
+days: 180
+warmup_days: 56            # history for forecasting; excluded from metrics
+region: {sites: 92, blood_banks: 8, radius_km: 120}   # 100 sites, for load
+site_size: {small: 0.5, medium: 0.35, large: 0.15}   # sets demand level
+demand:
+  model: poisson
+  weekly_pattern: [1.1, 1.1, 1.0, 1.0, 1.0, 0.7, 0.6] # Mon..Sun multipliers
+  group_mix: {O+: 0.35, A+: 0.28, B+: 0.20, AB+: 0.07, O-: 0.04, A-: 0.03, B-: 0.02, AB-: 0.01}  # illustrative
+  spikes: {probability_per_day: 0.02, multiplier: 3, duration_days: 2}
+supply:
+  deliveries_per_week: 3
+  fill_rate: 0.95
+donors: {count: 3000, base_accept_rate: 0.3, no_show_rate: 0.15}
+requests: {per_week: 6, urgency_mix: {emergency: 0.2, urgent: 0.5, routine: 0.3}}
+disruptions: []

@@ -1,0 +1,62 @@
+# One-command local stack (spec section 9): `make up`. Synthetic data only.
+x-app: &app
+  build: ./backend
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+psycopg://lifegrid_app:${APP_DB_PASSWORD}@db:5432/lifegrid
+    REDIS_URL: redis://redis:6379/0
+  depends_on:
+    db: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    migrate: { condition: service_completed_successfully }
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: lifegrid
+      POSTGRES_USER: lifegrid
+      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/db-init.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U lifegrid -d lifegrid"], interval: 3s, retries: 30 }
+
+  redis:
+    image: redis:7-alpine
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 3s, retries: 30 }
+
+  migrate:
+    build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://lifegrid:${DB_OWNER_PASSWORD}@db:5432/lifegrid
+    command: alembic upgrade head
+    depends_on:
+      db: { condition: service_healthy }
+
+  api:
+    <<: *app
+    ports: ["8000:8000"]
+    healthcheck: { test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/readyz')"], interval: 5s, retries: 20 }
+
+  worker:
+    <<: *app
+    command: celery -A app.workers.celery_app:celery worker --loglevel=INFO --concurrency=2
+
+  beat:
+    <<: *app
+    command: celery -A app.workers.celery_app:celery beat --loglevel=INFO --schedule /tmp/celerybeat-schedule
+
+  web:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [api]
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports: ["8025:8025"]
+
+volumes:
+  pgdata:

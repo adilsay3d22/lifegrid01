@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LifeGrid User Manual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 18mm 17mm 20mm; }
+  @page :first { margin: 0; }
+  :root { --brand: #8f1d2c; --ink: #18181b; --muted: #52525b; --line: #e4e4e7; --soft: #f4f4f5; --tint: #f8eced; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10.2pt/1.55 Geist, "Segoe UI", sans-serif; color: var(--ink); }
+  h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
+  h1 { font-size: 22pt; margin: 0 0 4mm; }
+  h2 { font-size: 13.5pt; margin: 9mm 0 2.5mm; break-after: avoid; }
+  h3 { font-size: 11pt; margin: 6mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.6mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
+  li { margin: 0.8mm 0; }
+  code, .mono { font-family: "Geist Mono", Consolas, monospace; font-size: 9pt; }
+  code { background: var(--soft); padding: 0.2mm 1.2mm; border-radius: 1mm; }
+  b, strong { font-weight: 600; }
+  a { color: var(--brand); text-decoration: none; }
+
+  .cover { height: 297mm; padding: 26mm 22mm; display: flex; flex-direction: column; background: #0c0c0e; color: #fafafa; break-after: page; }
+  .cover .logo { display: flex; align-items: center; gap: 4mm; font-weight: 600; font-size: 14pt; }
+  .cover h1 { font-size: 40pt; margin: auto 0 5mm; letter-spacing: -0.03em; }
+  .cover .sub { font-size: 14pt; color: #d4d4d8; max-width: 140mm; }
+  .cover .meta { margin-top: 18mm; display: grid; grid-template-columns: auto 1fr; gap: 1.5mm 8mm; font-size: 10pt; color: #a1a1aa; }
+  .cover .meta b { color: #fafafa; font-weight: 500; }
+  .cover .note { margin-top: 14mm; border-left: 2px solid var(--brand); padding-left: 5mm; font-size: 9.5pt; color: #a1a1aa; max-width: 150mm; }
+
+  .chapter { break-before: page; }
+  .chapter > .num { font: 600 9pt Geist, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); margin-bottom: 2mm; }
+  .lead { font-size: 11.5pt; color: var(--muted); max-width: 150mm; margin-bottom: 6mm; }
+
+  .toc { list-style: none; padding: 0; margin: 6mm 0 0; }
+  .toc li { display: flex; align-items: baseline; gap: 2mm; margin: 0; padding: 1.6mm 0; border-bottom: 1px solid var(--line); }
+  .toc li.sub { padding-left: 7mm; font-size: 9.5pt; color: var(--muted); border-bottom-style: dotted; }
+  .toc .t { flex: 1; }
+  .toc .pg { font-family: "Geist Mono", monospace; font-size: 9pt; color: var(--muted); }
+
+  figure { margin: 4mm 0 6mm; break-inside: avoid; }
+  figure img { display: block; max-width: 100%; max-height: 212mm; width: auto; border: 1px solid var(--line); border-radius: 2mm; }
+  figure.phone img { max-height: 150mm; width: auto; border-radius: 4mm; }
+  figure.phone.tall img { max-height: 165mm; }
+  figure.dialog img { max-width: 120mm; }
+  figure.fit img { max-height: 178mm; }
+  figcaption { margin-top: 1.8mm; font-size: 8.8pt; color: var(--muted); }
+  figcaption b { color: var(--ink); }
+
+  .pair { display: grid; grid-template-columns: 62mm 1fr; gap: 7mm; align-items: start; break-inside: avoid; margin: 4mm 0 7mm; }
+  .pair figure { margin: 0; }
+  .pair.wide { grid-template-columns: 1fr 1fr; }
+  .pair.dlg { grid-template-columns: 92mm 1fr; }
+  .pair figure.dialog img { max-width: 100%; }
+  .twophones { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; break-inside: avoid; }
+  .twophones figure img { max-height: 140mm; }
+
+  ol.steps { counter-reset: s; list-style: none; padding: 0; }
+  ol.steps > li { counter-increment: s; position: relative; padding-left: 8mm; margin: 2mm 0; }
+  ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0.3mm; width: 5.2mm; height: 5.2mm; border-radius: 50%; background: var(--brand); color: #fff; font: 600 7.8pt/5.2mm Geist, sans-serif; text-align: center; }
+
+  .callout { border-radius: 2mm; padding: 3mm 4mm; margin: 3mm 0 5mm; font-size: 9.5pt; break-inside: avoid; }
+  .callout.tip { background: #ecfdf5; border-left: 3px solid #047857; }
+  .callout.note { background: var(--soft); border-left: 3px solid #71717a; }
+  .callout.warn { background: #fffbeb; border-left: 3px solid #b45309; }
+  .callout.privacy { background: var(--tint); border-left: 3px solid var(--brand); }
+  .callout > b:first-child { display: block; margin-bottom: 0.8mm; }
+
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 6mm; font-size: 9pt; break-inside: avoid; }
+  th { text-align: left; font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1.5px solid var(--ink); padding: 1.6mm 2mm; }
+  td { border-bottom: 1px solid var(--line); padding: 1.8mm 2mm; vertical-align: top; }
+  td:first-child { font-weight: 500; white-space: nowrap; }
+  .chip { display: inline-block; font: 600 8pt Geist, sans-serif; padding: 0.3mm 1.8mm; border-radius: 1mm; background: var(--ink); color: #fff; }
+  .badge { display: inline-block; font-size: 8pt; padding: 0.2mm 1.6mm; border-radius: 1mm; border: 1px solid var(--line); background: var(--soft); white-space: nowrap; }
+  .roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3mm; margin: 4mm 0 6mm; }
+  .role { border: 1px solid var(--line); border-radius: 2mm; padding: 3mm 4mm; break-inside: avoid; }
+  .role b { display: block; }
+  .role span { font-size: 9pt; color: var(--muted); }
+  .kbd { font-family: "Geist Mono", monospace; font-size: 8.5pt; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 1mm; padding: 0 1.2mm; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#8f1d2c"/><path d="M32 12c-7 10-14 18-14 27a14 14 0 0 0 28 0c0-9-7-17-14-27z" fill="#fafafa"/><path d="M24 40h16M32 32v16" stroke="#8f1d2c" stroke-width="4" stroke-linecap="round"/></svg>
+    LifeGrid
+  </div>
+  <h1>User Manual</h1>
+  <p class="sub">How to use LifeGrid to share blood stock across a regional network, request blood for a patient, and give blood when a hospital nearby needs your group.</p>
+  <div class="meta">
+    <span>Version</span><b>1.0 · phases 0–6</b>
+    <span>Date</span><b>3 October 2026</b>
+    <span>Covers</span><b>Staff web app · donor and requester phone app</b>
+  </div>
+  <p class="note">Every screen in this manual comes from the demo build. All sites, units, donors, requests and phone numbers are synthetic. LifeGrid supports decisions; it does not replace clinical judgment, a licensed blood bank system, or local regulations.</p>
+</section>
+
+<section class="chapter" id="contents">
+  <h1>Contents</h1>
+  <ul class="toc">
+    {{TOC}}
+  </ul>
+</section>
+
+<!-- =============================== 1 =============================== -->
+<section class="chapter" id="intro">
+  <div class="num">Chapter 1</div>
+  <h1>About LifeGrid</h1>
+  <p class="lead">Blood is perishable and type-specific. When every hospital manages it alone, one site throws away expiring units while another runs short. LifeGrid gives the whole region one live view of stock and helps people move it, request it and donate it in time.</p>
+
+  <h2 id="intro-what">What you can do with it</h2>
+  <ul>
+    <li><b>See the network.</b> Stock at every hospital and blood bank, by blood group and by how soon it expires.</li>
+    <li><b>Plan ahead.</b> A 7-day demand forecast for every hospital, and a nightly transfer plan that moves units before they expire or before a hospital runs short. A manager approves every move.</li>
+    <li><b>Request blood.</b> A family member or a hospital asks for blood for a patient. The hospital confirms, LifeGrid checks stock across the network first, and only asks donors for what stock can’t cover.</li>
+    <li><b>Ask donors when stock runs low.</b> Staff send an appeal; eligible donors nearby get a text message and an invitation in the phone app.</li>
+    <li><b>Donate.</b> Donors register once, set when they can be contacted, accept invitations and message the hospital, without giving away their phone number.</li>
+  </ul>
+
+  <h2 id="intro-apps">Two apps</h2>
+  <table>
+    <tr><th>App</th><th>Who uses it</th><th>Where</th></tr>
+    <tr><td>Staff web app</td><td>Blood bank managers, hospital transfusion leads, donor coordinators, administrators, auditors</td><td>A computer browser, at <code>/staff</code>. Works on tablets and phones too.</td></tr>
+    <tr><td>Phone app</td><td>Donors and people requesting blood for a patient</td><td>A phone browser, at the main address (<code>/app</code>). Can be installed on the home screen like any app.</td></tr>
+  </table>
+
+  <h2 id="intro-roles">Roles</h2>
+  <p>What you see depends on your role. Staff are linked to one or more sites; LifeGrid checks your role and sites on every action, so menus only show what you can use.</p>
+  <div class="roles">
+    <div class="role"><b>Blood bank manager</b><span>Sees the whole region. Approves transfers, dispatches them, starts donor appeals, manages blood bank stock.</span></div>
+    <div class="role"><b>Hospital transfusion lead</b><span>Manages stock at their own hospital, confirms blood requests, receives transfers, records donor outcomes.</span></div>
+    <div class="role"><b>Donor coordinator</b><span>Looks after donors: deferrals, group verification, appeals, outcomes. Never sees donor contact details.</span></div>
+    <div class="role"><b>Administrator</b><span>Manages users, sites, settings and compatibility rules. Signs in with an authenticator code.</span></div>
+    <div class="role"><b>Auditor</b><span>Read-only access to everything, including the tamper-evident audit log.</span></div>
+    <div class="role"><b>Donor · Requester</b><span>Use the phone app. Sign in with a one-time code sent to their phone.</span></div>
+  </div>
+
+  <div class="callout privacy"><b>Privacy by design</b>LifeGrid stores only what its rules need. Donors have no name in the system, their area is rounded to about 1 km, and no medical detail is kept. Phone numbers are encrypted and shown to the other person in a conversation only when both choose to share them.</div>
+
+  <div class="callout note"><b>Safety boundaries</b>LifeGrid only recommends. A person approves every transfer, a hospital confirms every request, and donations happen only at licensed facilities. There are no payments to donors.</div>
+</section>
+
+<!-- =============================== 2 =============================== -->
+<section class="chapter" id="start">
+  <div class="num">Chapter 2</div>
+  <h1>Getting started</h1>
+  <p class="lead">Open the LifeGrid address your organisation gives you. The main address opens the phone app; staff use the link at the bottom of it, or go straight to <code>/staff</code>.</p>
+
+  <h2 id="start-phone">Signing in on the phone app</h2>
+  <div class="pair">
+    <figure class="phone"><img src="img/app-welcome.png"><figcaption><b>Welcome screen.</b> Choose why you are here.</figcaption></figure>
+    <div>
+      <ol class="steps">
+        <li>Tap <b>I want to donate</b> or <b>I need blood for a patient</b>.</li>
+        <li>Enter your mobile number with the country code, for example <code>+880 17…</code>, and tap <b>Send code</b>.</li>
+        <li>Type the 6-digit code from the text message and tap <b>Continue</b>. The first time, this creates your account; there is no password to remember.</li>
+      </ol>
+      <div class="callout warn"><b>Codes expire</b>A code is valid for 5 minutes. After 5 wrong attempts the number is locked for 15 minutes, and you can ask for at most 3 codes an hour.</div>
+      <p><b>Install the app.</b> If your phone supports it, an <b>Install the app</b> button appears under the two choices. It adds LifeGrid to your home screen so it opens like any other app. You can also use your browser’s “Add to Home screen”.</p>
+    </div>
+  </div>
+  <div class="twophones">
+    <figure class="phone"><img src="img/app-phone.png"><figcaption><b>Enter your number.</b></figcaption></figure>
+    <figure class="phone"><img src="img/app-code.png"><figcaption><b>Enter the code.</b> In the demo build no text message is sent; the code appears on screen and you can tap it to fill it in.</figcaption></figure>
+  </div>
+
+  <h2 id="start-staff">Signing in as staff</h2>
+  <figure><img src="img/staff-login.png"><figcaption><b>Staff sign-in.</b> Work email and password. The link at the bottom leads to the phone app.</figcaption></figure>
+  <ol class="steps">
+    <li>Enter your work email and password (at least 12 characters) and select <b>Sign in</b>.</li>
+    <li>If your account uses an authenticator app (always the case for administrators), enter the 6-digit code it shows and select <b>Verify and continue</b>.</li>
+    <li>LifeGrid opens the screen that fits your role: managers see the network overview, hospital leads their site’s stock, coordinators the donor list, auditors the audit log.</li>
+  </ol>
+  <div class="pair wide">
+    <figure><img src="img/staff-login-demo.png"><figcaption><b>Demo accounts.</b> In the demo build, open <b>Demo accounts</b> and pick a role to fill in the form.</figcaption></figure>
+    <figure><img src="img/admin-login-totp.png"><figcaption><b>Authenticator step</b> for administrators.</figcaption></figure>
+  </div>
+  <div class="callout note"><b>Staying signed in</b>You stay signed in for up to 7 days of use; LifeGrid renews your session in the background. Select <b>Sign out</b> at the bottom of the menu to end it. If an administrator disables your account, you are signed out at once. One browser holds one signed-in person; to try two roles at the same time, use a second browser or a private window.</div>
+
+  <h2 id="start-small">Staff app on a small screen</h2>
+  <div class="pair">
+    <figure class="phone"><img src="img/staff-mobile-menu.png"><figcaption><b>Menu on a phone.</b></figcaption></figure>
+    <div><p>On a narrow screen the side menu folds away. Tap the menu button at the top right to open it; tap outside it or press <span class="kbd">Esc</span> to close it. Tables that are wider than the screen scroll sideways.</p></div>
+  </div>
+</section>
+
+<!-- =============================== 3 =============================== -->
+<section class="chapter" id="donor">
+  <div class="num">Chapter 3</div>
+  <h1>For donors</h1>
+  <p class="lead">Register once, keep your availability up to date, and LifeGrid will invite you only when a hospital near you needs your blood group and you are able to donate.</p>
+
+  <h2 id="donor-register">Registering</h2>
+  <p>The first time you sign in as a donor, LifeGrid asks for a short profile.</p>
+  <div class="pair">
+    <figure class="phone tall"><img src="img/register-filled.png"><figcaption><b>Donor registration</b>, filled in.</figcaption></figure>
+    <div>
+      <ol class="steps">
+        <li><b>Your blood group.</b> Tap your group, or <b>I don’t know my group</b>. A coordinator can mark it as verified later from a facility record.</li>
+        <li><b>Your area.</b> Tap the map near where you live or work. LifeGrid rounds it to about 1 km before saving it; your exact address is never stored.</li>
+        <li><b>Birth year.</b> Used only for the age rule (18–60 by default).</li>
+        <li><b>Weight.</b> Tick the box if you weigh at least 50 kg.</li>
+        <li><b>Consent.</b> Read the consent text and tick <b>I agree to these terms</b>. You can’t register without it.</li>
+        <li>Tap <b>Save and continue</b>.</li>
+      </ol>
+      <div class="callout privacy"><b>What hospitals see</b>Until you accept an invitation, hospitals see only your blood group and area. Coordinators see a reference like <code>D-4F2A9C</code>, never your phone number.</div>
+    </div>
+  </div>
+
+  <h2 id="donor-home">Your home screen</h2>
+  <div class="pair">
+    <figure class="phone tall"><img src="img/donor-home.png"><figcaption><b>Donor home.</b></figcaption></figure>
+    <div>
+      <p><b>Donation status</b> tells you whether you can donate now. After a donation you have to wait 120 days (the default); after a deferral, until the date a coordinator set. While you wait, the card shows the date you become eligible again, and LifeGrid sends you one reminder on that day.</p>
+      <p><b>Open invitations</b> appear as a red bar. Tap it to see them.</p>
+      <p><b>Availability</b> pauses invitations without deleting anything:</p>
+      <ul>
+        <li><b>Available</b>: you can be invited.</li>
+        <li><b>Unavailable</b> or <b>Travelling</b>: no invitations.</li>
+      </ul>
+      <p><b>Quiet hours</b> stop invitations during the hours you choose, for example 22:00 to 07:00. Tick <b>Still contact me during quiet hours for emergencies</b> if you want emergency requests to reach you anyway.</p>
+      <p><b>Invitations per month</b> caps how often LifeGrid asks you (2 by default).</p>
+      <p>Changes save as soon as you make them.</p>
+    </div>
+  </div>
+
+  <h2 id="donor-invite">Answering an invitation</h2>
+  <div class="twophones">
+    <figure class="phone"><img src="img/donor-invitations.png"><figcaption><b>An invitation.</b> Blood group needed, the area, urgency and when it is needed. A <span class="badge">Stock appeal</span> label means a hospital is running low rather than one patient.</figcaption></figure>
+    <figure class="phone"><img src="img/donor-accepted.png"><figcaption><b>After accepting.</b> The card shows <span class="badge">Accepted</span> and a button to open messages.</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>You get a text message: “LifeGrid: urgent need for O+ blood near Southfield…”. Open the app and tap <b>Invitations</b>.</li>
+    <li>Tap <b>I can donate</b> if you can go, or <b>Decline</b> if not. Declining is fine and does not count against you.</li>
+    <li>If you accept, the hospital is told and a private conversation opens.</li>
+  </ol>
+  <div class="callout note"><b>Why you were invited</b>LifeGrid invites donors whose group is compatible, who are available, past their waiting period, not deferred, within the search distance and outside their quiet hours. It invites a few people at a time, in waves, and stops as soon as enough have accepted, so nobody is asked more than needed.</div>
+
+  <h2 id="donor-chat">Messages and phone numbers</h2>
+  <div class="pair">
+    <figure class="phone"><img src="img/donor-chat.png"><figcaption><b>Conversation with the hospital team.</b></figcaption></figure>
+    <div>
+      <p>Use the conversation to agree on a time and place. Messages stay inside LifeGrid.</p>
+      <p><b>Phone numbers</b> stay hidden. If you want to talk by phone, tap <b>Share my number</b>. Numbers appear for both of you only after <i>both</i> sides choose to share.</p>
+      <p>Donations happen only at the hospital or blood bank. Never hand over blood privately, and never accept payment.</p>
+    </div>
+  </div>
+
+  <h2 id="donor-data">Your data</h2>
+  <div class="twophones">
+    <figure class="phone"><img src="img/donor-privacy.png"><figcaption><b>My data.</b> What LifeGrid holds, the consent text, download and delete.</figcaption></figure>
+    <figure class="phone"><img src="img/donor-delete-dialog.png"><figcaption><b>Deleting.</b> Type DELETE to confirm.</figcaption></figure>
+  </div>
+  <ul>
+    <li><b>Download my data</b> saves a file with your profile and invitation history.</li>
+    <li><b>Delete my data</b> removes your group, area, birth year, dates and phone number, and signs you out. Only anonymous counts remain, so the hospital’s statistics stay correct. This can’t be undone.</li>
+  </ul>
+</section>
+
+<!-- =============================== 4 =============================== -->
+<section class="chapter" id="requester">
+  <div class="num">Chapter 4</div>
+  <h1>Requesting blood for a patient</h1>
+  <p class="lead">Use this when a patient you are helping needs blood. The hospital confirms every request before anything happens, then LifeGrid looks for stock first and asks donors only for what is missing.</p>
+
+  <h2 id="req-new">Making a request</h2>
+  <div class="pair">
+    <figure class="phone tall"><img src="img/requester-new.png"><figcaption><b>New request.</b></figcaption></figure>
+    <div>
+      <ol class="steps">
+        <li>Sign in with <b>I need blood for a patient</b>. Your list of requests opens; tap <b>New request</b>.</li>
+        <li><b>Patient blood group</b>: tap the group on the patient’s record.</li>
+        <li><b>Component</b>: red cells unless the doctor says platelets or plasma.</li>
+        <li><b>Units needed</b>: 1 to 20.</li>
+        <li><b>Hospital</b>: where the patient is treated.</li>
+        <li><b>Urgency</b>: emergency, urgent or routine. Emergency invites donors faster and over a smaller distance first.</li>
+        <li><b>Needed by</b>: the date and time the blood is needed.</li>
+        <li>Tap <b>Submit request</b>.</li>
+      </ol>
+      <div class="callout warn"><b>Limits</b>You can have up to 3 open requests and create up to 5 a day. The hospital and needed-by time are required.</div>
+    </div>
+  </div>
+
+  <h2 id="req-status">Following your request</h2>
+  <div class="twophones">
+    <figure class="phone"><img src="img/requester-status.png"><figcaption><b>Waiting for the hospital.</b> Nothing happens until a transfusion lead confirms.</figcaption></figure>
+    <figure class="phone"><img src="img/requester-status-confirmed.png"><figcaption><b>Confirmed and covered by stock.</b> Units secured fills up as stock is reserved or donors donate.</figcaption></figure>
+  </div>
+  <p>The status page shows units secured, how many came from stock, how many donors were notified and how many accepted, plus a four-step progress bar. It refreshes by itself.</p>
+  <table>
+    <tr><th>Status</th><th>What it means</th></tr>
+    <tr><td>Awaiting hospital</td><td>The hospital still has to confirm the request.</td></tr>
+    <tr><td>Confirmed</td><td>Confirmed; stock is being checked.</td></tr>
+    <tr><td>Covered by stock</td><td>Units in the network cover the whole request. No donors were contacted.</td></tr>
+    <tr><td>Finding donors</td><td>Stock didn’t cover everything, so eligible donors nearby are being invited for the rest.</td></tr>
+    <tr><td>Fulfilled</td><td>All units were secured.</td></tr>
+    <tr><td>Partly fulfilled</td><td>The needed-by time passed with some units secured.</td></tr>
+    <tr><td>Unfilled</td><td>The needed-by time passed with no units secured.</td></tr>
+    <tr><td>Cancelled</td><td>You or the hospital withdrew the request. Reserved units are released.</td></tr>
+  </table>
+  <div class="pair">
+    <figure class="phone"><img src="img/requester-list.png"><figcaption><b>My requests</b>, with each request’s status.</figcaption></figure>
+    <div>
+      <p>When donors accept, a <b>Donors who accepted</b> list appears on the status page. Tap a donor to message them; phone numbers are shared only if you both choose to share.</p>
+      <p><b>My requests</b> lists everything you have asked for, newest first. Tap a request to open its status page.</p>
+      <p>To withdraw a request, open it, tap <b>Cancel request</b> and confirm. Any units reserved for it go back to stock and donor invitations stop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== 5 =============================== -->
+<section class="chapter" id="manager">
+  <div class="num">Chapter 5</div>
+  <h1>For blood bank managers</h1>
+  <p class="lead">You see the whole region. Your daily work: check stock and low-stock warnings, review the overnight transfer plan, approve and dispatch transfers, and appeal to donors when a group runs low.</p>
+
+  <h2 id="mgr-overview">Network overview</h2>
+  <figure class="fit"><img src="img/overview.png"><figcaption><b>Network overview</b>, the manager’s home screen.</figcaption></figure>
+  <ul>
+    <li><b>Low stock</b> lists red-cell groups where a hospital holds fewer units than it is forecast to use in the next 2 days, worst first. Each row has <b>Appeal to donors</b> (see <a href="#mgr-appeal">Appealing to donors</a>).</li>
+    <li><b>Key figures</b>: units available, units expiring within 2 days, projected stockouts and open alerts.</li>
+    <li><b>Sites by risk</b>: every hospital and blood bank on the map, coloured critical, watch or stable. Click a site for its counts and a link to its stock.</li>
+    <li><b>Available stock by site and group</b>: one row per site, one column per blood group. The small bar under each number shows how much expires within 2 days (red), in 3–7 days (amber) or later (grey). Red numbers mean none on hand. Switch between red cells, platelets and plasma at the top right.</li>
+    <li><b>Run plan now</b> recalculates the transfer plan immediately; <b>Review tonight’s plan</b> opens it.</li>
+  </ul>
+
+  <h2 id="mgr-appeal">Appealing to donors when stock runs low</h2>
+  <div class="pair wide">
+    <figure class="dialog"><img src="img/appeal-dialog.png"><figcaption><b>Appeal dialog.</b> Units and urgency.</figcaption></figure>
+    <figure class="dialog"><img src="img/appeal-sent.png"><figcaption><b>Appeal started</b>, with the first wave of invitations sent.</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>In <b>Low stock</b>, select <b>Appeal to donors</b> on the group and hospital you want to cover.</li>
+    <li>Check <b>Units needed</b> (the projected shortfall is filled in) and choose the <b>urgency</b>.</li>
+    <li>Select <b>Send appeal</b>. LifeGrid invites eligible donors near that hospital in waves, by text message and in the app, until enough accept. Donors see the group, the area and the urgency only.</li>
+    <li>The row now shows <span class="badge">Appeal running</span>; you can’t start a second appeal for the same group and hospital while one is open.</li>
+  </ol>
+  <div class="callout tip"><b>How waves work</b>Each wave invites just enough donors to expect the shortfall plus 50% to accept. If not enough accept within the wait (10 minutes for emergency, 30 for urgent, 2 hours for routine), the next wave searches a wider area. If nobody accepts after the last wave, coordinators and bank managers are notified.</div>
+  <p>Follow an appeal on the <b>Requests</b> screen: appeals are marked <span class="badge">Donor appeal</span>. Open one to see which donors were invited and who accepted, and select <b>Message</b> next to a donor who accepted to talk to them.</p>
+  <div class="pair wide">
+    <figure><img src="img/appeal-request-dialog.png"><figcaption><b>Appeal details</b>: progress and the donors invited, by reference and group only.</figcaption></figure>
+    <figure><img src="img/staff-chat.png"><figcaption><b>Messaging a donor who accepted.</b></figcaption></figure>
+  </div>
+
+  <h2 id="mgr-stock">Site stock</h2>
+  <figure><img src="img/stock.png"><figcaption><b>Site stock</b> for a blood bank. Units are sorted first-expired, first-out.</figcaption></figure>
+  <ul>
+    <li><b>Choose the site</b> with the drop-down at the top right (managers can open any site).</li>
+    <li><b>Filter</b> by status, component, group and expiry band. Filters are kept in the address, so you can bookmark or share a filtered view.</li>
+    <li><b>Remaining</b> shows days left, or hours on the last day, in red when 2 days or fewer remain.</li>
+    <li>Select a unit code to open its <b>history</b>.</li>
+  </ul>
+
+  <h3>Changing units</h3>
+  <figure><img src="img/stock-bulk.png"><figcaption><b>Two units selected.</b> The bar at the bottom offers only actions that apply to every selected unit.</figcaption></figure>
+  <ol class="steps">
+    <li>Tick the units. The action bar appears at the bottom.</li>
+    <li>Choose an action. Every action shows the unit count and the codes before anything changes.</li>
+    <li>For <b>Quarantine</b> and <b>Discard</b> you must give a reason.</li>
+  </ol>
+  <figure class="dialog"><img src="img/stock-quarantine.png"><figcaption><b>Quarantine</b> needs a reason and confirms the count.</figcaption></figure>
+  <table>
+    <tr><th>Action</th><th>From</th><th>Who</th></tr>
+    <tr><td>Issue</td><td>Reserved (for a confirmed request)</td><td>Hospital lead</td></tr>
+    <tr><td>Quarantine</td><td>Available, reserved, in transit</td><td>Hospital lead, bank manager</td></tr>
+    <tr><td>Clear quarantine</td><td>Quarantined</td><td>Bank manager</td></tr>
+    <tr><td>Discard</td><td>Quarantined (bank manager) or expired</td><td>Hospital lead, bank manager</td></tr>
+  </table>
+  <p>Units expire automatically at their expiry time; reservations not issued within 24 hours return to stock.</p>
+
+  <h3>Receiving and importing units</h3>
+  <div class="pair wide">
+    <figure class="dialog"><img src="img/stock-receive.png"><figcaption><b>Receive unit.</b> The expiry date is filled in from the component’s shelf life; you can change it.</figcaption></figure>
+    <figure class="dialog"><img src="img/stock-import-result.png"><figcaption><b>Import result.</b> Good rows are imported; bad rows are listed with the reason.</figcaption></figure>
+  </div>
+  <p><b>Receive unit</b> records one released, labelled unit arriving at the site: unit code, group, component, collection and expiry. <b>Import CSV</b> takes a file (or pasted text) with the columns <code>unit_code, abo, rh, component, collected_at, expires_at</code>; select <b>Download template</b> for an example.</p>
+
+  <h3>Unit history</h3>
+  <figure><img src="img/unit-detail.png"><figcaption><b>Unit detail</b>: every status change with who did it, when and why.</figcaption></figure>
+
+  <h2 id="mgr-forecast">Forecasts</h2>
+  <figure><img src="img/forecasts.png"><figcaption><b>Demand forecast</b> for one hospital, component and group.</figcaption></figure>
+  <p>Choose a site, a component and a group. The chart shows the last 28 days of actual use (black), the forecast for the next 7 days (dashed red) and the likely range (shaded, 10th to 90th percentile). The panel on the right names the model chosen for this series, its error compared with the simple “same day last week” baseline, and how often actual use fell inside the range. Forecasts are recalculated every night at 01:30.</p>
+
+  <h2 id="mgr-plan">Transfer plan</h2>
+  <figure><img src="img/plan.png"><figcaption><b>Transfer plan</b>: projected effect at the top, recommendations below.</figcaption></figure>
+  <p>Every night at 02:00 LifeGrid works out which transfers would cut both waste and shortages over the next 3 days, at low transport cost. <b>Projected effect</b> compares expired and short units with and without the plan.</p>
+  <p>Each recommendation shows the route, group, component, distance, reason and expected benefit:</p>
+  <ul>
+    <li><span class="badge">Expiry risk at source</span>: the units would expire unused where they are.</li>
+    <li><span class="badge">Projected shortage at destination</span>: the destination is forecast to run short.</li>
+    <li><span class="badge">Relay or swap between sites</span>: part of a chain that helps a third site.</li>
+    <li><span class="badge">For a blood request</span>: proposed when a hospital confirmed a request and stock was elsewhere.</li>
+  </ul>
+  <ol class="steps">
+    <li>Lower the unit count if you want to move fewer units.</li>
+    <li>Select <b>Approve</b> (confirm in the dialog) or <b>Reject</b>. Nothing moves without approval.</li>
+    <li>Approved lines appear under <b>Transfers</b>, ready to dispatch.</li>
+  </ol>
+  <figure class="dialog"><img src="img/plan-approve.png"><figcaption><b>Approving</b> a recommendation with an edited count.</figcaption></figure>
+
+  <h2 id="mgr-transfers">Transfers</h2>
+  <figure><img src="img/transfers.png"><figcaption><b>Transfers to dispatch.</b> Tabs for to dispatch, in transit and received.</figcaption></figure>
+  <ol class="steps">
+    <li>Select <b>Dispatch</b>. LifeGrid picks the actual units first-expired-first-out, only from units with enough shelf life left to travel (5 days for red cells by default).</li>
+    <li>Check the list and select <b>Dispatch</b>. The units become <span class="badge">In transit</span>; their location changes only when the destination receives them.</li>
+  </ol>
+  <div class="pair wide">
+    <figure class="dialog"><img src="img/transfer-dispatch.png"><figcaption><b>Dispatch</b> with the picked units.</figcaption></figure>
+    <figure><img src="img/transfers-in-transit.png"><figcaption><b>In transit</b>, waiting for the destination to receive.</figcaption></figure>
+  </div>
+
+  <h2 id="mgr-requests">Requests</h2>
+  <figure><img src="img/manager-requests.png"><figcaption><b>Requests</b> across the region, with donor appeals marked.</figcaption></figure>
+  <p>Managers see every request and appeal. Select one to see its progress, its donors and, for requests covered from other sites, a link to review the proposed transfers.</p>
+</section>
+
+<!-- =============================== 6 =============================== -->
+<section class="chapter" id="lead">
+  <div class="num">Chapter 6</div>
+  <h1>For hospital transfusion leads</h1>
+  <p class="lead">You look after stock at your hospital, confirm requests for your patients, receive transfers and record whether donors donated.</p>
+
+  <h2 id="lead-stock">Your hospital’s stock</h2>
+  <figure><img src="img/lead-stock.png"><figcaption><b>Site stock</b> opens on your hospital. Leads see only their own sites’ units; other sites appear as totals on the overview.</figcaption></figure>
+  <p>Stock actions work as described in <a href="#mgr-stock">Site stock</a>. You can issue reserved units to patients, quarantine and discard.</p>
+
+  <h2 id="lead-confirm">Confirming a request</h2>
+  <figure><img src="img/lead-requests.png"><figcaption><b>Requests</b>: anything waiting for you is highlighted at the top.</figcaption></figure>
+  <div class="pair wide">
+    <figure class="dialog"><img src="img/lead-request-dialog.png"><figcaption><b>Before confirming.</b></figcaption></figure>
+    <figure class="dialog"><img src="img/lead-request-confirmed.png"><figcaption><b>After confirming</b>: here stock covered it all.</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li>Open the request under <b>needs confirmation</b> and check it against the patient’s record.</li>
+    <li>Select <b>Confirm request</b>. LifeGrid then:
+      <ul>
+        <li>reserves compatible units at your hospital, best match first, then first-expired-first-out;</li>
+        <li>proposes transfers from other sites for anything still missing (a bank manager approves them);</li>
+        <li>invites donors only for the units stock can’t cover (red cells). Platelet and plasma shortfalls go to the coordinators instead.</li>
+      </ul>
+    </li>
+    <li>The requester sees each step on their phone. Use <b>Cancel request</b> if it is no longer needed; reserved units go back to stock.</li>
+  </ol>
+  <div class="callout note"><b>Your own requests</b>Requests you create with <b>New request</b> on this screen are confirmed for your hospital straight away.</div>
+
+  <h2 id="lead-outcome">Recording donor outcomes</h2>
+  <p>When a donor who accepted comes in (or doesn’t), open the request, find the donor in the list and select <b>Donated</b>, <b>No-show</b> or <b>Deferred on site</b>. A donation counts towards units secured and resets that donor’s waiting period. Outcomes are the only thing that changes a donor’s reliability score. The screenshot in <a href="#coord-outcome">chapter 7</a> shows the buttons.</p>
+
+  <h2 id="lead-receive">Receiving transfers</h2>
+  <p>On <b>Transfers</b>, the <b>In transit</b> tab lists transfers coming to your hospital. When the box arrives, select <b>Receive</b> and confirm the unit codes. The units become available at your hospital.</p>
+</section>
+
+<!-- =============================== 7 =============================== -->
+<section class="chapter" id="coord">
+  <div class="num">Chapter 7</div>
+  <h1>For donor coordinators</h1>
+  <p class="lead">You keep the donor list accurate and safe: deferrals, verified groups, appeals and outcomes. You never see donors’ names or contact details.</p>
+
+  <h2 id="coord-donors">Donor list</h2>
+  <figure><img src="img/coordinator-donors.png"><figcaption><b>Donors</b>, with the low-stock panel at the top.</figcaption></figure>
+  <ul>
+    <li>Search by donor reference, filter by group and eligibility.</li>
+    <li>A solid group chip with a check mark means the group is verified; a dashed chip means self-reported.</li>
+    <li><b>Eligibility</b> shows <span class="badge">Eligible now</span>, a deferral date, or the date the waiting period ends.</li>
+    <li><b>Reliability</b> is built from past responses and donations (0 to 1).</li>
+  </ul>
+
+  <h2 id="coord-defer">Deferrals and group verification</h2>
+  <div class="pair dlg">
+    <figure class="dialog"><img src="img/coordinator-deferral.png"><figcaption><b>Record deferral.</b></figcaption></figure>
+    <div>
+      <p>Select <b>Defer</b>, pick a category and the date the donor can donate again. Only the category and date are stored, never medical detail. The donor is not invited until that date.</p>
+      <p>Select <b>Verify group</b> when you have confirmed a donor’s group from a facility record. Verified donors are preferred when scores are tied.</p>
+    </div>
+  </div>
+
+  <h2 id="coord-appeals">Appeals</h2>
+  <p>Coordinators can start donor appeals from the same <b>Low stock</b> panel as bank managers; see <a href="#mgr-appeal">Appealing to donors</a>.</p>
+
+  <h2 id="coord-outcome">Recording outcomes</h2>
+  <figure class="dialog"><img src="img/coordinator-outcome.png"><figcaption><b>Request details for a coordinator</b>: donors who accepted have <b>Donated</b>, <b>No-show</b> and <b>Deferred on site</b> buttons.</figcaption></figure>
+</section>
+
+<!-- =============================== 8 =============================== -->
+<section class="chapter" id="admin">
+  <div class="num">Chapter 8</div>
+  <h1>For administrators and auditors</h1>
+  <p class="lead">Administrators manage who can do what, and the rules LifeGrid follows. Every change is versioned and written to a tamper-evident audit log that auditors can check at any time.</p>
+
+  <h2 id="admin-users">Users</h2>
+  <figure><img src="img/admin-users.png"><figcaption><b>Users</b>: role, site scope, authenticator and active switch.</figcaption></figure>
+  <ul>
+    <li>Change a user’s <b>role</b> with the drop-down. Role and scope changes are audited.</li>
+    <li>Turn <b>Active</b> off to disable an account; that person is signed out everywhere at once.</li>
+    <li>Administrators must use an authenticator; the column shows <span class="badge">Required</span> until one is set up.</li>
+  </ul>
+
+  <h2 id="admin-sites">Sites</h2>
+  <figure><img src="img/admin-sites.png"><figcaption><b>Sites</b>: every hospital and blood bank with code, type, location, time zone and status.</figcaption></figure>
+
+  <h2 id="admin-settings">Settings</h2>
+  <figure><img src="img/admin-settings.png"><figcaption><b>Settings</b> with the change history on the right.</figcaption></figure>
+  <p>Business rules live here rather than in the software: shelf lives, minimum shelf life for transfers, expiry alert windows, waiting period after donation, age limits, invitation limits, wave timing and search distances, plan time and solver limits, request limits. Edit a value and select <b>Save</b>. Values with several parts (for example per component) are edited as text in the form <code>{"red_cells": 5, "platelets": 1, "plasma": 30}</code>. The history records the old and new value, who changed it and when.</p>
+  <div class="callout warn"><b>Clinical values</b>Shelf life, compatibility, eligibility and waiting periods are prototype defaults. A qualified clinician must review them against local standards before real use.</div>
+
+  <h2 id="admin-rules">Compatibility rules</h2>
+  <figure><img src="img/admin-rules.png"><figcaption><b>Compatibility</b> for red cells: rows are patients, columns are donor groups, numbers are preference (1 = best).</figcaption></figure>
+  <p>LifeGrid never suggests a unit or donor outside this table. Exact matches always come first, and O− red cells come last for anyone who isn’t O−, so they are kept for those who need them. Switch between red cells, platelets and plasma at the top.</p>
+
+  <h2 id="admin-audit">Audit log</h2>
+  <figure><img src="img/audit.png"><figcaption><b>Audit log</b> after <b>Verify chain</b>.</figcaption></figure>
+  <p>Every sensitive action is recorded: sign-ins and failed sign-ins, role changes, unit changes, transfer decisions, request confirmations, phone sharing, data export and deletion, settings changes. Each event is chained to the one before by a cryptographic hash. <b>Verify chain</b> recomputes the whole chain; if any stored event had been edited, LifeGrid names the first one that doesn’t match. Auditors can search and verify but change nothing.</p>
+</section>
+
+<!-- =============================== 9 =============================== -->
+<section class="chapter" id="preview">
+  <div class="num">Chapter 9</div>
+  <h1>Alerts and reports (preview)</h1>
+  <p class="lead">These two screens are part of the next build phase. In this version they show demonstration data only; with the live system they are empty.</p>
+  <h2 id="prev-alerts">Alerts</h2>
+  <figure><img src="img/alerts.png"><figcaption><b>Alerts</b> (demonstration data): expiry, projected stockout, temperature and unfilled-request alerts.</figcaption></figure>
+  <p>Alerts can be acknowledged (recording who and when) and resolved. Hospital leads see their own sites; coordinators see donor-related alerts.</p>
+  <h2 id="prev-reports">Reports</h2>
+  <figure><img src="img/reports.png"><figcaption><b>Reports</b> (demonstration data): wastage, stock, transfers and requests, each exportable as CSV.</figcaption></figure>
+</section>
+
+<!-- =============================== 10 =============================== -->
+<section class="chapter" id="ref">
+  <div class="num">Chapter 10</div>
+  <h1>Reference</h1>
+
+  <h2 id="ref-units">Unit statuses</h2>
+  <table>
+    <tr><th>Status</th><th>Meaning</th><th>Can become</th></tr>
+    <tr><td>Available</td><td>On the shelf, usable</td><td>Reserved, in transit, quarantined, expired</td></tr>
+    <tr><td>Reserved</td><td>Held for a confirmed request</td><td>Issued, available (timeout or cancel), quarantined, expired</td></tr>
+    <tr><td>In transit</td><td>Dispatched on an approved transfer</td><td>Available at the destination, quarantined, expired</td></tr>
+    <tr><td>Quarantined</td><td>Held after a temperature excursion or concern</td><td>Available (cleared), discarded</td></tr>
+    <tr><td>Issued</td><td>Given to a patient</td><td>(final)</td></tr>
+    <tr><td>Expired</td><td>Past its expiry time</td><td>Discarded</td></tr>
+    <tr><td>Discarded</td><td>Disposed of</td><td>(final)</td></tr>
+  </table>
+
+  <h2 id="ref-elig">Donor eligibility (defaults)</h2>
+  <table>
+    <tr><th>Rule</th><th>Default</th></tr>
+    <tr><td>Age</td><td>18 to 60</td></tr>
+    <tr><td>Weight</td><td>At least 50 kg (self-reported)</td></tr>
+    <tr><td>After a donation</td><td>120 days before the next</td></tr>
+    <tr><td>Invitations</td><td>At most 2 per 30 days, unless the donor raises it</td></tr>
+    <tr><td>Deferral</td><td>Not invited until the eligible-again date</td></tr>
+    <tr><td>Quiet hours</td><td>No invitations, except emergencies the donor opted into</td></tr>
+  </table>
+
+  <h2 id="ref-shelf">Shelf life and transfers (defaults)</h2>
+  <table>
+    <tr><th>Component</th><th>Shelf life</th><th>Min. life to transfer</th><th>Expiry alert</th></tr>
+    <tr><td>Red cells</td><td>42 days</td><td>5 days</td><td>3 days</td></tr>
+    <tr><td>Platelets</td><td>5 days</td><td>1 day</td><td>1 day</td></tr>
+    <tr><td>Plasma</td><td>365 days</td><td>30 days</td><td>14 days</td></tr>
+  </table>
+
+  <h2 id="ref-match">Red-cell compatibility</h2>
+  <table>
+    <tr><th>Patient</th><th>Acceptable donors, best first</th></tr>
+    <tr><td>O−</td><td>O−</td></tr>
+    <tr><td>O+</td><td>O+, O−</td></tr>
+    <tr><td>A−</td><td>A−, O−</td></tr>
+    <tr><td>A+</td><td>A+, A−, O+, O−</td></tr>
+    <tr><td>B−</td><td>B−, O−</td></tr>
+    <tr><td>B+</td><td>B+, B−, O+, O−</td></tr>
+    <tr><td>AB−</td><td>AB−, A−, B−, O−</td></tr>
+    <tr><td>AB+</td><td>AB+, AB−, A+, A−, B+, B−, O+, O−</td></tr>
+  </table>
+
+  <h2 id="ref-faq">Troubleshooting</h2>
+  <table>
+    <tr><th>Problem</th><th>What to do</th></tr>
+    <tr><td>No code arrives</td><td>Check the number includes the country code. Wait a minute; you can request 3 codes an hour. In the demo build the code is shown on screen.</td></tr>
+    <tr><td>“Too many attempts”</td><td>The number is locked for 15 minutes after 5 wrong codes.</td></tr>
+    <tr><td>Signed out unexpectedly</td><td>Sessions end after 7 days, when an administrator disables the account, or if an old session token is reused (a safety measure). Sign in again.</td></tr>
+    <tr><td>Another person’s screen appears</td><td>One browser holds one sign-in. Use a separate browser or private window for each person.</td></tr>
+    <tr><td>“You do not have access to this site”</td><td>Your role or site scope doesn’t include it. Ask an administrator.</td></tr>
+    <tr><td>Can’t start an appeal</td><td>An appeal for that group and hospital is already running; follow it on Requests.</td></tr>
+    <tr><td>Donor not invited</td><td>Check availability, quiet hours, waiting period, deferral, age, monthly invitation limit and distance from the hospital.</td></tr>
+    <tr><td>A screen shows “Something went wrong”</td><td>Select <b>Try again</b>. If it persists, the service may be down; your data is safe.</td></tr>
+  </table>
+
+  <h2 id="ref-glossary">Glossary</h2>
+  <table>
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td>FEFO</td><td>First-expired, first-out: the unit closest to expiry is used or sent first.</td></tr>
+    <tr><td>Appeal</td><td>A request to donors started by staff when a group runs low at a hospital.</td></tr>
+    <tr><td>Wave</td><td>One round of invitations. Later waves search a wider area.</td></tr>
+    <tr><td>Deferral</td><td>A coordinator’s decision that a donor can’t donate until a date.</td></tr>
+    <tr><td>Quarantine</td><td>Holding units out of use until they are reviewed.</td></tr>
+    <tr><td>Component</td><td>Red cells, platelets or plasma.</td></tr>
+    <tr><td>Rh</td><td>The + or − part of a blood group.</td></tr>
+  </table>
+</section>
+
+</body>
+</html>

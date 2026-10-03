@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --color-brand: #8f1d2c;
+  --color-brand-strong: #741523;
+  --color-brand-soft: #f8eced;
+  --color-canvas: #fafafa;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply bg-canvas text-zinc-900 font-sans antialiased;
+}
+
+/* Staggered row/section reveal: set style={{'--i': n}} */
+.reveal {
+  animation: reveal 0.5s var(--ease-out-expo) both;
+  animation-delay: calc(min(var(--i, 0), 12) * 40ms);
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+.skeleton {
+  @apply rounded-md bg-zinc-200/70;
+  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.6), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.live-dot {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+dialog::backdrop {
+  background: rgb(24 24 27 / 0.4);
+  backdrop-filter: blur(2px);
+}
+dialog[open] {
+  animation: reveal 0.3s var(--ease-out-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.leaflet-container { font-family: var(--font-sans); }
+
+html { scroll-padding-top: 4.5rem; }
+button, a, label, input, select, textarea, summary { touch-action: manipulation; }
