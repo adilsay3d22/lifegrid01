@@ -7,7 +7,7 @@ One Vercel project serves the web app and the API (as a Python function); Neon i
 2. On the project dashboard click **Connect**, leave **Connection pooling** on, and copy the connection string (host contains `-pooler`). Don't paste it into chats or commits.
 
 ## 2. Create tables, seed demo data, get the Vercel variables (once, from your PC)
-In `lifegridbackend`:
+In `lifegrid/backend`:
 
 ```powershell
 .venv\Scripts\python scripts\seed_remote.py
