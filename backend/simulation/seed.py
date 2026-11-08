@@ -45,6 +45,8 @@ STAFF = [  # synthetic accounts; match the web app's demo list
 DEMO_DONOR_PHONE = "+8801000000001"  # 10xx is not a mobile prefix in Bangladesh: synthetic numbers only (SEC-17)
 DEMO_REQUESTER_PHONE = "+8801000009999"
 SEED_DONORS = 400
+# Demo story (docs/demo): Southfield (H-01) starts short of O+ red cells, so its low-stock appeal reaches the demo donor.
+DEMO_SHORT = ("H-01", "red_cells", Abo.O, Rh.pos, 2)
 
 
 def _seed_donors(db, world, sites, today):  # type: ignore[no-untyped-def]
@@ -106,10 +108,13 @@ def seed_demo(scenario: str = "normal", seed: int = 42, create_schema: bool = Fa
 
         seq, units = 0, 0
         for (code, comp, abo, rh), lots in result.stock.lots.items():
-            for lot in lots:
+            keep = DEMO_SHORT[4] if (code, comp.value, abo, rh) == DEMO_SHORT[:4] else None
+            for lot in sorted(lots, key=lambda x: -x.expiry) if keep is not None else lots:  # keep the freshest
                 if lot.expiry < stop:
                     continue
-                for _ in range(lot.n):
+                for _ in range(lot.n if keep is None else min(lot.n, keep)):
+                    if keep is not None:
+                        keep -= 1
                     seq += 1
                     u = BloodUnit(unit_code=f"LG26-{seq:07d}", abo=abo, rh=rh, component=comp, collected_at=at(lot.collected, 9),
                                   expires_at=at(lot.expiry + 1), site_id=sites[code].id, status=UnitStatus.available)

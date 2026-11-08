@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LifeGrid — Live demo script</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm; }
+  * { box-sizing: border-box; }
+  body { font: 10.3pt/1.42 Arial, Helvetica, sans-serif; color: #18181b; margin: 0; }
+  h1 { font-size: 25pt; line-height: 1.1; margin: 0 0 4px; letter-spacing: -0.3px; }
+  .lede { color: #71717a; font-size: 11pt; margin: 0 0 18px; }
+  h2 { font-size: 14.5pt; margin: 20px 0 8px; }
+  code, .k { font-family: "Courier New", monospace; font-weight: 700; font-size: 9.6pt; }
+  .ui { color: #1d4ed8; font-weight: 700; }
+  b { font-weight: 700; }
+  ol.steps { list-style: none; margin: 0; padding: 0; }
+  ol.steps li { display: grid; grid-template-columns: 42px 1fr; padding: 6px 0; border-bottom: 1px solid #e4e4e7; break-inside: avoid; }
+  ol.steps li > span:first-child { color: #1d4ed8; font-weight: 700; padding-left: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+  tr { break-inside: avoid; }
+  h2 { break-after: avoid; }
+  th { background: #0f172a; color: #fff; text-align: left; padding: 7px 8px; font-weight: 700; }
+  td { padding: 6px 8px; border-bottom: 1px solid #e4e4e7; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  .box { background: #eef2fb; padding: 10px 12px; margin-top: 12px; font-size: 9.8pt; break-inside: avoid; }
+  .shows { background: #ecfdf3; padding: 10px 12px; margin: 12px 0 20px; font-size: 9.8pt; break-inside: avoid; }
+  .part { background: #0f172a; color: #fff; padding: 11px 14px 10px; margin-top: 6px; display: flex; justify-content: space-between; align-items: flex-end; break-after: avoid; break-inside: avoid; }
+  .part h3 { font-size: 13.5pt; margin: 0 0 3px; }
+  .part .who { color: #cbd5e1; font-size: 9.3pt; }
+  .part .sign { color: #cbd5e1; font-size: 9pt; text-align: right; margin-left: 14px; max-width: 46%; }
+  .part .sign code { font-size: 8.8pt; }
+  .part h3 { white-space: nowrap; }
+  .part .sign code { color: #fff; }
+  .section { break-inside: avoid-page; }
+  .page-break { break-before: page; }
+  .note { color: #52525b; font-size: 9.4pt; }
+</style>
+</head>
+<body>
+
+<h1>LifeGrid — Live demo script</h1>
+<p class="lede">One story, start to finish: Southfield General Hospital is running out of O+ blood. A manager appeals to donors and a donor
+answers from their phone. Then a family requests blood for a patient, the hospital confirms it, and the network covers it from stock. Finally the
+nightly plan, a new donor, and the audit trail. About 35–45 minutes.</p>
+
+<h2>Before the demo (5 minutes)</h2>
+<ol class="steps">
+  <li><span>0.1</span><span><b>Reset the demo data</b> (only needed if it has been used since the last reset). In the Neon console open
+    <b>SQL Editor</b> and run <code>DROP SCHEMA public CASCADE; CREATE SCHEMA public;</code>. Then in a terminal, in
+    <code>lifegrid\backend</code>, run <code>.venv\Scripts\python scripts\seed_remote.py</code> and paste the Neon connection string. This
+    rebuilds the clean demo region for today's date.</span></li>
+  <li><span>0.2</span><span>Open <code>https://lifegrid01.vercel.app</code> a few minutes early and click once, so the server and database
+    are awake.</span></li>
+  <li><span>0.3</span><span>Every staff account's password is <code>synthetic-demo-pass</code>. On the sign-in page, <span class="ui">Demo
+    accounts</span> fills the form for you. Only the administrator needs a 6-digit code: add the setup key
+    <code>LIFEGRIDDEMOSECRETKEYAAAAAAAAAAA</code> (time-based) to Google Authenticator or any authenticator app once.</span></li>
+  <li><span>0.4</span><span>Phone app sign-in uses a one-time code. No SMS is sent in the demo: the code appears on screen under
+    <b>Development code</b>; tap it to fill it in.</span></li>
+  <li><span>0.5</span><span>One browser holds one sign-in. Use a normal window for staff and a phone (or a private window in phone view,
+    <code>F12</code> then <code>Ctrl+Shift+M</code>) for the donor and requester, side by side. Sign out is at the bottom of the menu.</span></li>
+  <li><span>0.6</span><span>To run the demo again later, repeat step 0.1.</span></li>
+</ol>
+
+<h2>The cast</h2>
+<table>
+  <tr><th style="width:32%">Sign in with</th><th style="width:17%">Who</th><th>Role in the story</th><th style="width:9%">Code?</th></tr>
+  <tr><td><code>nabila.karim@lifegrid.test</code></td><td>Nabila Karim</td><td>Blood bank manager. Sees the whole region, starts the donor appeal, approves and dispatches transfers.</td><td>No</td></tr>
+  <tr><td><code>tanvir.rahman@lifegrid.test</code></td><td>Tanvir Rahman</td><td>Transfusion lead at Southfield General Hospital (H-01). Confirms requests, receives transfers, records donations.</td><td>No</td></tr>
+  <tr><td><code>imran.chowdhury@lifegrid.test</code></td><td>Imran Chowdhury</td><td>Donor coordinator. Sees donors by reference only; verifies groups and records deferrals.</td><td>No</td></tr>
+  <tr><td><code>sadia.haque@lifegrid.test</code></td><td>Sadia Haque</td><td>Administrator. Changes a rule and shows its history.</td><td>Yes</td></tr>
+  <tr><td><code>mahmud.alam@lifegrid.test</code></td><td>Mahmud Alam</td><td>Auditor. Read-only; verifies the audit chain at the end.</td><td>No</td></tr>
+  <tr><td><code>+8801000000001</code></td><td>The donor</td><td>O+, lives about 1 km from Southfield, eligible and has never donated. Phone app.</td><td>On screen</td></tr>
+  <tr><td><code>+8801000009999</code></td><td>The requester</td><td>A relative asking for blood for a patient at Southfield. Phone app.</td><td>On screen</td></tr>
+  <tr><td><code>+8801000005555</code></td><td>A new donor</td><td>Not in the system yet; registers in Part 6.</td><td>On screen</td></tr>
+</table>
+<div class="box"><b>What's in the demo data:</b> 14 sites: two regional blood banks (<b>Riverside</b> and <b>Lakeview</b>) and twelve hospitals.
+About 1,230 red-cell, platelet and plasma units, 8 weeks of usage history, 400 synthetic donors, and a transfer plan that ran "last night".
+<b>Southfield General Hospital has only 2 O+ red-cell units</b> while its forecast says it will use 7 in the next 2 days. Everything is synthetic.</div>
+
+
+<div class="section">
+<div class="part"><div><h3>PART 1 · The manager's morning</h3><div class="who">Nabila Karim, blood bank manager</div></div>
+  <div class="sign">Sign in: <code>nabila.karim@lifegrid.test</code> &nbsp; no code needed</div></div>
+<ol class="steps">
+  <li><span>1.1</span><span><b>Network overview</b> opens. Point out the key figures: <b>Red cells available</b>, <b>Expiring in 2 days</b>,
+    <b>Projected stockouts</b> and <b>Open alerts</b>.</span></li>
+  <li><span>1.2</span><span><b>Sites by risk</b>: every hospital and blood bank on the map, coloured <b>Critical</b>, <b>Watch</b> or
+    <b>Stable</b>. Click Southfield to show its counts and the <span class="ui">Open site stock</span> link.</span></li>
+  <li><span>1.3</span><span><b>Available stock by site and group</b>: on the Southfield row the <b>O+</b> cell shows <b>2</b>. The small
+    bar under each number shows how much expires within 2 days (red), in 3–7 days (amber) or later. Switch to <span class="ui">Platelets</span>
+    at the top right: they last only 5 days, so expiry pressure is much higher.</span></li>
+  <li><span>1.4</span><span>The <b>Low stock</b> panel at the top lists <b>O+ · Southfield General Hospital</b> first:
+    <b>2 on hand · 7 needed in 2 days</b>. This comes from the forecast, before anyone has run out.</span></li>
+  <li><span>1.5</span><span>Open <span class="ui">Forecasts</span>. Choose Southfield General Hospital, Red cells, O+. Black line: the
+    last 28 days of real use. Dashed line: the next 7 days. Shaded band: the likely range. The right panel names the model picked for this
+    series and compares its error with the simple "same day last week" baseline.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> the whole region on one screen, and a warning that comes from a forecast, days before the shelf is empty.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 2 · An appeal reaches a donor's phone</h3><div class="who">Nabila (staff window) and the donor (phone)</div></div>
+  <div class="sign">Phone: <code>+8801000000001</code> &nbsp; code on screen</div></div>
+<ol class="steps">
+  <li><span>2.1</span><span>Back on the overview, in <b>Low stock</b>, press <span class="ui">Appeal to donors</span> on the O+ Southfield
+    row. The dialog <b>Appeal for O+ at Southfield General Hospital</b> has <b>Units needed</b> filled in (projected shortfall <b>5</b>) and
+    urgency <b>Urgent</b>. Press <span class="ui">Send appeal</span>.</span></li>
+  <li><span>2.2</span><span>The message reads <b>Appeal AP-… started. 7 donors invited in the first wave.</b> (7 in the daytime; fewer at night, when some donors' quiet hours apply.) The row now says
+    <b>Appeal running</b>. Open <span class="ui">Requests</span>: the appeal is listed as <b>Donor appeal</b>. Open it to show the 7 invited
+    donors in wave 1, by reference and blood group only, without names or phone numbers.</span></li>
+  <li><span>2.3</span><span><b>On the phone</b>, open <code>lifegrid01.vercel.app</code>. Tap <span class="ui">I want to donate</span>,
+    enter <code>+8801000000001</code>, <span class="ui">Send code</span>, tap the development code, <span class="ui">Continue</span>. Home
+    shows <b>You can donate</b> and a red bar: <b>1 open invitation</b>.</span></li>
+  <li><span>2.4</span><span>Tap it. The card shows <b>O+</b>, <b>Hospital in Southfield</b>, <b>Urgent</b>, when it is needed, and a
+    <b>Stock appeal</b> label. The donor sees the area, not the hospital's name. Press <span class="ui">I can donate</span>. The card
+    changes to <b>Accepted</b>.</span></li>
+  <li><span>2.5</span><span>Press <span class="ui">Open messages</span>. Type "I can come at 4 pm today." and press
+    <span class="ui">Send message</span>. Point out <b>Phone numbers: Not shared</b>.</span></li>
+  <li><span>2.6</span><span><b>Staff window</b>: refresh the appeal. The donor is now <b>Accepted</b>. Press
+    <span class="ui">Message</span> next to them and reply "Thank you! Please come to the blood bank desk, ground floor." The reply appears on
+    the phone.</span></li>
+  <li><span>2.7</span><span>Optional: press <span class="ui">Share my number</span> on both sides. Numbers appear only once both have
+    agreed. Then sign out of the staff window.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> LifeGrid invited only donors who are compatible, eligible, available, nearby and outside their quiet
+hours, and only a few at a time: enough to expect the shortfall plus 50% to accept. Donor and hospital talk without exposing anyone's number.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 3 · The hospital records the donation</h3><div class="who">Tanvir Rahman, transfusion lead, Southfield</div></div>
+  <div class="sign">Sign in: <code>tanvir.rahman@lifegrid.test</code> &nbsp; no code needed</div></div>
+<ol class="steps">
+  <li><span>3.1</span><span>Tanvir lands on <b>Site stock</b> for Southfield General: only his hospital's units, first-expired first.</span></li>
+  <li><span>3.2</span><span>Open <span class="ui">Requests</span>, then the appeal <b>AP-…</b>. In the donor list press
+    <span class="ui">Donated</span> next to the donor who accepted. The appeal shows <b>1 of 5 secured</b>.</span></li>
+  <li><span>3.3</span><span><b>On the phone</b>, go to <span class="ui">Home</span>: <b>Eligible again in 120 days</b>, with the date. The
+    donor won't be invited again until then.</span></li>
+  <li><span>3.4</span><span>Sign out of the phone app (<span class="ui">Sign out</span> in its menu). Keep Tanvir signed in for Part 4.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> the outcome updates the appeal, starts the donor's waiting period and feeds their reliability score.
+Only real outcomes change reliability; declining an invitation never counts against anyone.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 4 · A family asks for blood</h3><div class="who">The requester (phone), then Tanvir</div></div>
+  <div class="sign">Phone: <code>+8801000009999</code> &nbsp; code on screen</div></div>
+<ol class="steps">
+  <li><span>4.1</span><span><b>On the phone</b>: tap <span class="ui">I need blood for a patient</span>, enter <code>+8801000009999</code>,
+    tap the code, <span class="ui">Continue</span>. <b>My requests</b> is empty. Tap <span class="ui">New request</span>.</span></li>
+  <li><span>4.2</span><span>Patient blood group <b>B−</b>, component <b>Red cells</b>, units needed <b>6</b>, hospital <b>Southfield
+    General Hospital</b>, urgency <b>Urgent</b>, needed by <b>this evening</b>. Press <span class="ui">Submit request</span>. Status:
+    <b>Awaiting hospital</b>: stock and donors stay untouched until the hospital confirms.</span></li>
+  <li><span>4.3</span><span><b>Tanvir</b>: <span class="ui">Requests</span> shows <b>1 request needs confirmation</b> at the top. Open
+    <b>RQ-…</b>, check it against the patient's record, and press <span class="ui">Confirm request</span>.</span></li>
+  <li><span>4.4</span><span>Result: <b>Covered by stock</b> and the message <b>Stock covers this request. No donors were contacted.</b>
+    LifeGrid reserved the <b>5</b> compatible units at Southfield (2 B− and 3 O−; a B− patient can receive only B− or O−) and proposed
+    <b>1</b> more from Westwood District Hospital, 13 km away. A link appears: <span class="ui">Review the proposed transfers for this
+    request</span>.</span></li>
+  <li><span>4.5</span><span><b>On the phone</b> the status updates by itself: <b>Covered by stock</b>, units secured, <b>6 from stock</b>,
+    <b>0 donors notified</b>, and the four-step progress bar.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> a hospital confirms every request, and LifeGrid looks at stock across the whole network before it asks a
+single donor. Compare Part 2, where stock was the problem and donors were the answer.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 5 · Moving units across the network</h3><div class="who">Nabila approves and dispatches; Tanvir receives and issues</div></div>
+  <div class="sign">Sign in: <code>nabila.karim@…</code>, then <code>tanvir.rahman@…</code></div></div>
+<ol class="steps">
+  <li><span>5.1</span><span><b>Nabila</b>: <span class="ui">Requests</span> → the request <b>RQ-…</b> → <span class="ui">Review the proposed
+    transfers for this request</span>. One line: <b>Westwood District Hospital to Southfield General Hospital</b>, B−, 1 unit,
+    <b>For a blood request</b>. Press <span class="ui">Approve</span> and confirm <b>Approve transfer of 1 unit?</b></span></li>
+  <li><span>5.2</span><span><span class="ui">Transfers</span> → <b>To dispatch</b> → <span class="ui">Dispatch</span>. LifeGrid picks
+    the actual unit, first-expired-first-out, from units with enough shelf life left to travel (5 days for red cells). Press
+    <span class="ui">Dispatch</span>. It moves to <b>In transit</b>: <b>Awaiting receipt at destination</b>.</span></li>
+  <li><span>5.3</span><span>Still Nabila: open <span class="ui">Transfer plan</span> (last night's plan). <b>Projected effect</b> compares
+    expired and short units without and with the plan. Find <b>Lakeview Regional Blood Bank to Southfield General Hospital</b>, O+,
+    <b>13 units</b>, <b>Projected shortage at destination</b>: the network's answer to the same O+ shortage. Lower it to <b>10</b> and press
+    <span class="ui">Approve</span>. The dialog notes <b>You reduced this transfer from 13 to 10 units.</b> Optional: <span class="ui">Reject</span>
+    a <b>Relay or swap between sites</b> line, to show nothing moves without a person. Sign out.</span></li>
+  <li><span>5.4</span><span><b>Tanvir</b>: <span class="ui">Transfers</span> → <b>In transit</b> → <span class="ui">Receive</span> on the
+    unit from Westwood, and confirm. The unit is now available at Southfield, ready for the patient's sixth unit.</span></li>
+  <li><span>5.5</span><span><span class="ui">Stock</span>: filter status <b>Reserved</b>. The 5 units held for the request are listed.
+    Tick them, press <span class="ui">Issue</span> in the bar at the bottom, and confirm <b>Issue 5 units?</b> Click one unit code: its history
+    shows every step with who did it, when and why. Sign out.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> the optimizer weighs waste, shortages and distance across the region, and a person approves every move.
+Units travel first-expired-first-out, and a unit's location changes only when the destination receives it.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 6 · A new donor joins</h3><div class="who">A new person, on the phone</div></div>
+  <div class="sign">Phone: <code>+8801000005555</code> &nbsp; code on screen</div></div>
+<ol class="steps">
+  <li><span>6.1</span><span>Tap <span class="ui">I want to donate</span>, enter <code>+8801000005555</code>, tap the code,
+    <span class="ui">Continue</span>. Because this number is new, <b>Set up your donor profile</b> opens.</span></li>
+  <li><span>6.2</span><span>Pick blood group <b>A+</b>. Tap the map near Southfield: the pin is rounded to about 1 km. Birth year
+    <b>1998</b>, tick <b>I weigh at least 50 kg</b>, read and tick the consent, then press <span class="ui">Save and continue</span>. Home says
+    <b>You can donate</b>.</span></li>
+  <li><span>6.3</span><span>Set <b>Quiet hours</b> from 22:00 to 07:00 and tick <b>Still contact me during quiet hours for emergencies</b>.
+    Set <b>Availability</b> to <b>Travelling</b> to pause invitations, then back to <b>Available</b>. Changes save as you make them.</span></li>
+  <li><span>6.4</span><span>Open <span class="ui">My data</span>: what LifeGrid holds (no name, no address, no medical history),
+    <span class="ui">Download my data</span> and <span class="ui">Delete my data</span>. Don't delete during the demo.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> privacy by design. Phone numbers are encrypted, the area is rounded, and the donor can see, export or erase
+their data at any time.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 7 · The donor coordinator</h3><div class="who">Imran Chowdhury</div></div>
+  <div class="sign">Sign in: <code>imran.chowdhury@lifegrid.test</code> &nbsp; no code needed</div></div>
+<ol class="steps">
+  <li><span>7.1</span><span><b>Donors</b> opens with the Low stock panel on top: Southfield O+ now shows <b>Appeal running</b>. The heading
+    says <b>Contact details are never shown here</b>.</span></li>
+  <li><span>7.2</span><span>Filter group <b>A+</b> to find the new donor. The dashed group chip means <b>Self-reported</b>. Press
+    <span class="ui">Verify group</span>: the chip turns solid, <b>Group verified</b>.</span></li>
+  <li><span>7.3</span><span>On another donor press <span class="ui">Defer</span>, pick a category and an <b>Eligible again on</b> date, then
+    <span class="ui">Save deferral</span>; LifeGrid keeps just the category and date. Sign out.</span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> the people who manage donors work with references and rules, never personal details.</div>
+</div>
+
+<div class="section">
+<div class="part"><div><h3>PART 8 · Rules and the audit trail</h3><div class="who">Sadia Haque (administrator), then Mahmud Alam (auditor)</div></div>
+  <div class="sign">Sign in: <code>sadia.haque@…</code> &nbsp; authenticator code: yes</div></div>
+<ol class="steps">
+  <li><span>8.1</span><span><b>Sadia</b>: password, then the 6-digit code from the authenticator app, then <span class="ui">Verify and
+    continue</span>. Open <span class="ui">Administration</span> → <b>Settings</b>.</span></li>
+  <li><span>8.2</span><span>Change <code>max_invites_per_30d</code> from 2 to <b>3</b> and press <span class="ui">Save</span>.
+    <b>Change history</b> on the right shows the old value, the new value, who changed it and when. Rules like shelf life, waiting periods,
+    wave timing and search distances all live here, not in the code.</span></li>
+  <li><span>8.3</span><span><b>Compatibility</b> tab: rows are patients, columns are donor groups, numbers are preference. O− comes last for
+    everyone who isn't O−, so it's kept for the patients who need it. <b>Users</b> tab: role, site scope, authenticator and the
+    <b>Active</b> switch. Sign out.</span></li>
+  <li><span>8.4</span><span><b>Mahmud</b> (<code>mahmud.alam@lifegrid.test</code>, no code): <b>Audit log</b> lists every action from
+    today: the appeal, the request and its confirmation, the transfers, the issued units, the settings change, every sign-in. Press
+    <span class="ui">Verify chain</span>: <b>Chain intact. N events verified.</b></span></li>
+</ol>
+<div class="shows"><b>What this shows:</b> every sensitive action is chained to the one before it by a cryptographic hash. If anyone edited a past
+record, Verify chain names the first event that no longer matches. Auditors can check everything and change nothing.</div>
+</div>
+
+<div class="section">
+<h2>How it all connects</h2>
+<table>
+  <tr><th style="width:38%">When this happens</th><th>It shows up here</th></tr>
+  <tr><td>A hospital's stock falls below its forecast</td><td>Low stock on the Overview and Donors screens, Projected stockouts, and a transfer in the nightly plan</td></tr>
+  <tr><td>A manager sends an appeal</td><td>An SMS (mock) and an invitation on eligible donors' phones; a Donor appeal on Requests with the invited donors</td></tr>
+  <tr><td>A donor accepts</td><td>Accepted on the appeal; a private conversation with the hospital team</td></tr>
+  <tr><td>The hospital records Donated</td><td>Units secured on the appeal; the donor's 120-day waiting period and reliability</td></tr>
+  <tr><td>A requester submits a request</td><td>Needs confirmation on the hospital lead's Requests screen. Nothing else happens yet</td></tr>
+  <tr><td>The hospital lead confirms</td><td>Units reserved at the hospital, transfers proposed from other sites, status on the requester's phone; donors only for a shortfall</td></tr>
+  <tr><td>A manager approves and dispatches</td><td>Transfers: In transit at both ends; the units' history</td></tr>
+  <tr><td>The destination receives</td><td>Units available at the new site; the stock matrix on the Overview</td></tr>
+  <tr><td>An administrator changes a rule</td><td>Change history; LifeGrid uses the new value from that moment</td></tr>
+  <tr><td>Any of the above</td><td>The hash-chained audit log, checked with Verify chain</td></tr>
+</table>
+<p class="note">LifeGrid only recommends: a person approves every transfer, a hospital confirms every request, and donations happen only at licensed
+facilities. Clinical values in the demo are placeholders that need clinician review before real use.</p>
+</div>
+
+</body>
+</html>
